@@ -75,10 +75,10 @@ namespace eclassroom {
 			this->tbName = (gcnew System::Windows::Forms::TextBox());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel3 = (gcnew System::Windows::Forms::Panel());
+			this->tbEmail = (gcnew System::Windows::Forms::TextBox());
+			this->tbPassword = (gcnew System::Windows::Forms::TextBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->btnRegister = (gcnew System::Windows::Forms::Button());
-			this->tbPassword = (gcnew System::Windows::Forms::TextBox());
-			this->tbEmail = (gcnew System::Windows::Forms::TextBox());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->btnLoginRegisterForm = (gcnew System::Windows::Forms::Button());
@@ -106,58 +106,43 @@ namespace eclassroom {
 			// 
 			// panel1
 			// 
-			this->panel1->BackColor = System::Drawing::Color::Transparent;
-			this->panel1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel1.BackgroundImage")));
+			this->panel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(36)), static_cast<System::Int32>(static_cast<System::Byte>(160)),
+				static_cast<System::Int32>(static_cast<System::Byte>(255)));
 			this->panel1->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			this->panel1->Controls->Add(this->panel3);
 			this->panel1->Location = System::Drawing::Point(0, 1);
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(900, 671);
 			this->panel1->TabIndex = 3;
+			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &RegisterForm::panel1_Paint);
 			// 
 			// panel3
 			// 
-			this->panel3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(24)),
-				static_cast<System::Int32>(static_cast<System::Byte>(24)));
+			this->panel3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(6)), static_cast<System::Int32>(static_cast<System::Byte>(106)),
+				static_cast<System::Int32>(static_cast<System::Byte>(172)));
+			this->panel3->Controls->Add(this->tbName);
+			this->panel3->Controls->Add(this->tbEmail);
+			this->panel3->Controls->Add(this->tbPassword);
 			this->panel3->Controls->Add(this->label1);
 			this->panel3->Controls->Add(this->btnRegister);
-			this->panel3->Controls->Add(this->tbPassword);
-			this->panel3->Controls->Add(this->tbEmail);
-			this->panel3->Controls->Add(this->tbName);
 			this->panel3->Location = System::Drawing::Point(86, 75);
 			this->panel3->Name = L"panel3";
 			this->panel3->Size = System::Drawing::Size(702, 522);
 			this->panel3->TabIndex = 0;
 			// 
-			// label1
+			// tbEmail
 			// 
-			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 28.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->tbEmail->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(24)),
+				static_cast<System::Int32>(static_cast<System::Byte>(24)));
+			this->tbEmail->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->tbEmail->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label1->ForeColor = System::Drawing::Color::White;
-			this->label1->Location = System::Drawing::Point(253, 65);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(206, 54);
-			this->label1->TabIndex = 4;
-			this->label1->Text = L"Register";
-			this->label1->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
-			// 
-			// btnRegister
-			// 
-			this->btnRegister->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(63)), static_cast<System::Int32>(static_cast<System::Byte>(29)),
-				static_cast<System::Int32>(static_cast<System::Byte>(3)));
-			this->btnRegister->FlatAppearance->BorderSize = 0;
-			this->btnRegister->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->btnRegister->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->btnRegister->ForeColor = System::Drawing::Color::White;
-			this->btnRegister->Location = System::Drawing::Point(286, 417);
-			this->btnRegister->Name = L"btnRegister";
-			this->btnRegister->Size = System::Drawing::Size(132, 50);
-			this->btnRegister->TabIndex = 3;
-			this->btnRegister->Text = L"Register";
-			this->btnRegister->UseVisualStyleBackColor = false;
-			this->btnRegister->Click += gcnew System::EventHandler(this, &RegisterForm::btnRegister_Click);
+			this->tbEmail->ForeColor = System::Drawing::Color::White;
+			this->tbEmail->Location = System::Drawing::Point(163, 256);
+			this->tbEmail->Name = L"tbEmail";
+			this->tbEmail->Size = System::Drawing::Size(369, 34);
+			this->tbEmail->TabIndex = 2;
+			this->tbEmail->Text = L"Email";
 			// 
 			// tbPassword
 			// 
@@ -175,24 +160,40 @@ namespace eclassroom {
 			this->tbPassword->Text = L"Password";
 			this->tbPassword->TextChanged += gcnew System::EventHandler(this, &RegisterForm::textBox3_TextChanged);
 			// 
-			// tbEmail
+			// label1
 			// 
-			this->tbEmail->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(24)),
-				static_cast<System::Int32>(static_cast<System::Byte>(24)));
-			this->tbEmail->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->tbEmail->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->label1->AutoSize = true;
+			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 28.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->tbEmail->ForeColor = System::Drawing::Color::White;
-			this->tbEmail->Location = System::Drawing::Point(163, 256);
-			this->tbEmail->Name = L"tbEmail";
-			this->tbEmail->Size = System::Drawing::Size(369, 34);
-			this->tbEmail->TabIndex = 2;
-			this->tbEmail->Text = L"Email";
+			this->label1->ForeColor = System::Drawing::Color::White;
+			this->label1->Location = System::Drawing::Point(253, 65);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(206, 54);
+			this->label1->TabIndex = 4;
+			this->label1->Text = L"Register";
+			this->label1->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
+			// btnRegister
+			// 
+			this->btnRegister->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(87)),
+				static_cast<System::Int32>(static_cast<System::Byte>(151)));
+			this->btnRegister->FlatAppearance->BorderSize = 0;
+			this->btnRegister->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->btnRegister->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->btnRegister->ForeColor = System::Drawing::Color::White;
+			this->btnRegister->Location = System::Drawing::Point(286, 417);
+			this->btnRegister->Name = L"btnRegister";
+			this->btnRegister->Size = System::Drawing::Size(132, 50);
+			this->btnRegister->TabIndex = 3;
+			this->btnRegister->Text = L"Register";
+			this->btnRegister->UseVisualStyleBackColor = false;
+			this->btnRegister->Click += gcnew System::EventHandler(this, &RegisterForm::btnRegister_Click);
 			// 
 			// panel2
 			// 
-			this->panel2->BackColor = System::Drawing::Color::Transparent;
-			this->panel2->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel2.BackgroundImage")));
+			this->panel2->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(36)), static_cast<System::Int32>(static_cast<System::Byte>(160)),
+				static_cast<System::Int32>(static_cast<System::Byte>(255)));
 			this->panel2->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			this->panel2->Controls->Add(this->label3);
 			this->panel2->Controls->Add(this->btnLoginRegisterForm);
@@ -217,8 +218,8 @@ namespace eclassroom {
 			// 
 			// btnLoginRegisterForm
 			// 
-			this->btnLoginRegisterForm->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(63)),
-				static_cast<System::Int32>(static_cast<System::Byte>(29)), static_cast<System::Int32>(static_cast<System::Byte>(3)));
+			this->btnLoginRegisterForm->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)),
+				static_cast<System::Int32>(static_cast<System::Byte>(87)), static_cast<System::Int32>(static_cast<System::Byte>(151)));
 			this->btnLoginRegisterForm->FlatAppearance->BorderSize = 0;
 			this->btnLoginRegisterForm->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->btnLoginRegisterForm->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular,
@@ -234,23 +235,23 @@ namespace eclassroom {
 			// 
 			// label2
 			// 
-			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->label2->Font = (gcnew System::Drawing::Font(L"Bahnschrift Light", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label2->ForeColor = System::Drawing::Color::White;
-			this->label2->Location = System::Drawing::Point(85, 279);
+			this->label2->ForeColor = System::Drawing::Color::Black;
+			this->label2->Location = System::Drawing::Point(3, 215);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(227, 86);
+			this->label2->Size = System::Drawing::Size(377, 86);
 			this->label2->TabIndex = 1;
 			this->label2->Text = L"Teams! But better! (Maybe)";
 			this->label2->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// pictureBox1
 			// 
-			this->pictureBox1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->pictureBox1->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
-			this->pictureBox1->Location = System::Drawing::Point(75, 39);
+			this->pictureBox1->Location = System::Drawing::Point(-22, 0);
 			this->pictureBox1->Name = L"pictureBox1";
-			this->pictureBox1->Size = System::Drawing::Size(250, 250);
+			this->pictureBox1->Size = System::Drawing::Size(418, 365);
 			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->pictureBox1->TabIndex = 0;
 			this->pictureBox1->TabStop = false;
@@ -259,7 +260,7 @@ namespace eclassroom {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1262, 673);
+			this->ClientSize = System::Drawing::Size(1262, 663);
 			this->Controls->Add(this->panel2);
 			this->Controls->Add(this->panel1);
 			this->MaximizeBox = false;
@@ -318,6 +319,8 @@ private: System::Void btnRegister_Click(System::Object^ sender, System::EventArg
 		MessageBox::Show("Failed to register new user", "Failed", MessageBoxButtons::OK);
 	}
 
+}
+private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 }
 };
 }

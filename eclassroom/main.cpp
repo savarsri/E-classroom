@@ -38,8 +38,5 @@ void main(array<String^>^ args)
 		eclassroom::Dashboard dashboard(user);
 		Application::Run(% dashboard);
 	}
-	else {
-		MessageBox::Show("No", "Main.cpp", MessageBoxButtons::OK);
-	}
 
 }
