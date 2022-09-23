@@ -122,12 +122,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CreateTeam.cpp" />
     <ClCompile Include="Dashboard.cpp" />
     <ClCompile Include="LoginForm.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RegisterForm.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CreateTeam.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Dashboard.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -140,6 +144,9 @@
     <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CreateTeam.resx">
+      <DependentUpon>CreateTeam.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dashboard.resx">
       <DependentUpon>Dashboard.h</DependentUpon>
     </EmbeddedResource>
