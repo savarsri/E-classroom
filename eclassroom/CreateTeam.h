@@ -4,6 +4,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <iostream>
+#include "User.h"
 
 namespace eclassroom {
 
@@ -24,12 +25,14 @@ namespace eclassroom {
 	public ref class CreateTeam : public System::Windows::Forms::Form
 	{
 	public:
-		CreateTeam(void)
+		User^ u = nullptr;
+		CreateTeam(User^ user)
 		{
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
 			//
+			u = user;
 		}
 
 	protected:
@@ -51,6 +54,7 @@ namespace eclassroom {
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
 	private: System::Windows::Forms::Button^ btnCreate;
 	private: System::Windows::Forms::Button^ btnCancel;
+
 
 	private:
 		/// <summary>
@@ -116,7 +120,7 @@ namespace eclassroom {
 			this->btnCreate->FlatStyle = System::Windows::Forms::FlatStyle::Popup;
 			this->btnCreate->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btnCreate->Location = System::Drawing::Point(199, 275);
+			this->btnCreate->Location = System::Drawing::Point(199, 284);
 			this->btnCreate->Name = L"btnCreate";
 			this->btnCreate->Size = System::Drawing::Size(99, 41);
 			this->btnCreate->TabIndex = 3;
@@ -162,10 +166,14 @@ namespace eclassroom {
 
 		}
 #pragma endregion
+		
 	private: System::Void btnCancel_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
 	}
+		   
 private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^ e) {
+	
+
 	String^ name = tbName->Text;
 
 	if (name->Length == 0) {
@@ -182,8 +190,9 @@ private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^
 		res = res + alphabet[rand() % 26];
 
 	String^ code = gcnew String(res.data());
+	String^ tempCode;
 	
-	String^ query = "CREATE TABLE " + code + "(Code char(50), Users char(50), Messages varchar(max));";
+	String^ query = "CREATE TABLE " + code + "(name char(50), code char(50), createdBy char(50), users char(50), messages varchar(max));";
 
 		try
 		{
@@ -195,6 +204,60 @@ private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^
 			SqlCommand command(sqlQuery, % sqlConn);
 			command.ExecuteNonQuery();
 
+			try {
+				String^ sqlQuery = "Select teams from users where email=@email";
+				SqlCommand command(sqlQuery, % sqlConn);
+				command.Parameters->AddWithValue("@email", u->email);
+				SqlDataReader^ reader;
+				reader = command.ExecuteReader();
+				if (reader->Read()) {
+					if (reader["teams"]->ToString() == "NULL" || reader["teams"]->ToString() == "") {
+						tempCode = "";
+					}
+					else {
+						tempCode = reader["teams"]->ToString();
+					}
+				}
+				else
+				{
+					MessageBox::Show("No data", "Failed", MessageBoxButtons::OK);
+				}
+				reader->Close();
+			}
+			catch (Exception^ ex)
+			{
+				MessageBox::Show("Failed to fetch previous codes", "Failed", MessageBoxButtons::OK);
+			}
+
+			try {
+
+				String^ sqlQuery = "UPDATE users set teams=@teams where email=@email;";
+				SqlCommand command(sqlQuery, % sqlConn);
+				command.Parameters->AddWithValue("@teams", tempCode+code);
+				command.Parameters->AddWithValue("@email", u->email);
+				command.ExecuteNonQuery();
+			}
+			catch (Exception^ ex)
+			{
+				MessageBox::Show("Failed to update data", "Failed", MessageBoxButtons::OK);
+			}			
+
+			try {
+				String^ sqlQuery = "INSERT INTO " + code + " (name, code, createdBy, users) VALUES " + "(@name, @code, @createdBy, @users);";
+				SqlCommand command(sqlQuery, % sqlConn);
+				command.Parameters->AddWithValue("@name", name);
+				command.Parameters->AddWithValue("@code", code);
+				command.Parameters->AddWithValue("@createdBy", u->email);
+				command.Parameters->AddWithValue("@users", u->email);
+
+				command.ExecuteNonQuery();
+			}
+			catch (Exception^ ex)
+			{
+				MessageBox::Show("Failed to join the team", "Failed", MessageBoxButtons::OK);
+			}
+
+			sqlConn.Close();
 			this->Close();
 
 		}

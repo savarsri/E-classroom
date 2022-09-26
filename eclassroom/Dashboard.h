@@ -18,13 +18,14 @@ namespace eclassroom {
 	public ref class Dashboard : public System::Windows::Forms::Form
 	{
 	public:
+		User^ u = nullptr;
 		Dashboard(User^ user)
 		{
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
 			//
-			lbWelcome->Text = "Welcome " + user->name;
+			u = user;
 		}
 
 	protected:
@@ -39,17 +40,24 @@ namespace eclassroom {
 			}
 		}
 	private: System::Windows::Forms::Label^ lbWelcome;
+	private: System::Windows::Forms::Button^ btnNewTeam;
 	protected:
 
 
-	private: System::Windows::Forms::Button^ button1;
+
 	private: System::Windows::Forms::Panel^ panel1;
 	private: System::Windows::Forms::Panel^ panel2;
-	private: System::Windows::Forms::TextBox^ textBox1;
+	private: System::Windows::Forms::TextBox^ tbTeamCode;
+
 	private: System::Windows::Forms::Label^ label1;
-	private: System::Windows::Forms::Button^ button2;
+
+
 	private: System::Windows::Forms::Label^ label2;
-	private: System::Windows::Forms::ListView^ listView1;
+	private: System::Windows::Forms::ListView^ lvTeams;
+
+	private: System::Windows::Forms::Button^ btnJoinTeam;
+	private: System::Windows::Forms::Button^ btnRefresh;
+
 	protected:
 
 	private:
@@ -67,14 +75,15 @@ namespace eclassroom {
 		{
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Dashboard::typeid));
 			this->lbWelcome = (gcnew System::Windows::Forms::Label());
-			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->btnNewTeam = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
-			this->listView1 = (gcnew System::Windows::Forms::ListView());
+			this->btnRefresh = (gcnew System::Windows::Forms::Button());
+			this->lvTeams = (gcnew System::Windows::Forms::ListView());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->btnJoinTeam = (gcnew System::Windows::Forms::Button());
+			this->tbTeamCode = (gcnew System::Windows::Forms::TextBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->SuspendLayout();
@@ -93,40 +102,53 @@ namespace eclassroom {
 			this->lbWelcome->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			this->lbWelcome->Click += gcnew System::EventHandler(this, &Dashboard::label1_Click);
 			// 
-			// button1
+			// btnNewTeam
 			// 
-			this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->btnNewTeam->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->btnNewTeam->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->button1->Location = System::Drawing::Point(373, 210);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(253, 63);
-			this->button1->TabIndex = 2;
-			this->button1->Text = L"Create New Team";
-			this->button1->UseVisualStyleBackColor = true;
-			this->button1->Click += gcnew System::EventHandler(this, &Dashboard::button1_Click);
+			this->btnNewTeam->Location = System::Drawing::Point(373, 210);
+			this->btnNewTeam->Name = L"btnNewTeam";
+			this->btnNewTeam->Size = System::Drawing::Size(253, 63);
+			this->btnNewTeam->TabIndex = 2;
+			this->btnNewTeam->Text = L"Create New Team";
+			this->btnNewTeam->UseVisualStyleBackColor = true;
+			this->btnNewTeam->Click += gcnew System::EventHandler(this, &Dashboard::button1_Click);
 			// 
 			// panel1
 			// 
 			this->panel1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel1.BackgroundImage")));
 			this->panel1->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			this->panel1->Controls->Add(this->listView1);
+			this->panel1->Controls->Add(this->btnRefresh);
+			this->panel1->Controls->Add(this->lvTeams);
 			this->panel1->Controls->Add(this->label2);
 			this->panel1->Location = System::Drawing::Point(-6, -2);
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(264, 670);
 			this->panel1->TabIndex = 3;
 			// 
-			// listView1
+			// btnRefresh
 			// 
-			this->listView1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->btnRefresh->BackColor = System::Drawing::Color::Transparent;
+			this->btnRefresh->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"btnRefresh.BackgroundImage")));
+			this->btnRefresh->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
+			this->btnRefresh->Location = System::Drawing::Point(226, 11);
+			this->btnRefresh->Name = L"btnRefresh";
+			this->btnRefresh->Size = System::Drawing::Size(29, 29);
+			this->btnRefresh->TabIndex = 2;
+			this->btnRefresh->UseVisualStyleBackColor = false;
+			this->btnRefresh->Click += gcnew System::EventHandler(this, &Dashboard::btnRefresh_Click);
+			// 
+			// lvTeams
+			// 
+			this->lvTeams->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->listView1->HideSelection = false;
-			this->listView1->Location = System::Drawing::Point(19, 44);
-			this->listView1->Name = L"listView1";
-			this->listView1->Size = System::Drawing::Size(236, 609);
-			this->listView1->TabIndex = 1;
-			this->listView1->UseCompatibleStateImageBehavior = false;
+			this->lvTeams->HideSelection = false;
+			this->lvTeams->Location = System::Drawing::Point(19, 44);
+			this->lvTeams->Name = L"lvTeams";
+			this->lvTeams->Size = System::Drawing::Size(236, 609);
+			this->lvTeams->TabIndex = 1;
+			this->lvTeams->UseCompatibleStateImageBehavior = false;
 			// 
 			// label2
 			// 
@@ -143,25 +165,37 @@ namespace eclassroom {
 			// 
 			// panel2
 			// 
-			this->panel2->Controls->Add(this->textBox1);
+			this->panel2->Controls->Add(this->btnJoinTeam);
+			this->panel2->Controls->Add(this->tbTeamCode);
 			this->panel2->Controls->Add(this->label1);
-			this->panel2->Controls->Add(this->button2);
-			this->panel2->Controls->Add(this->button1);
+			this->panel2->Controls->Add(this->btnNewTeam);
 			this->panel2->Location = System::Drawing::Point(255, -2);
 			this->panel2->Name = L"panel2";
 			this->panel2->Size = System::Drawing::Size(1014, 670);
 			this->panel2->TabIndex = 4;
 			// 
-			// textBox1
+			// btnJoinTeam
 			// 
-			this->textBox1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->btnJoinTeam->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->textBox1->Location = System::Drawing::Point(373, 361);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(253, 34);
-			this->textBox1->TabIndex = 4;
-			this->textBox1->Text = L"Enter Team Code";
-			this->textBox1->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->btnJoinTeam->Location = System::Drawing::Point(447, 426);
+			this->btnJoinTeam->Name = L"btnJoinTeam";
+			this->btnJoinTeam->Size = System::Drawing::Size(109, 42);
+			this->btnJoinTeam->TabIndex = 5;
+			this->btnJoinTeam->Text = L"Join";
+			this->btnJoinTeam->UseVisualStyleBackColor = true;
+			this->btnJoinTeam->Click += gcnew System::EventHandler(this, &Dashboard::btnJoinTeam_Click);
+			// 
+			// tbTeamCode
+			// 
+			this->tbTeamCode->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->tbTeamCode->Location = System::Drawing::Point(373, 361);
+			this->tbTeamCode->Name = L"tbTeamCode";
+			this->tbTeamCode->Size = System::Drawing::Size(253, 34);
+			this->tbTeamCode->TabIndex = 4;
+			this->tbTeamCode->Text = L"Enter Team Code";
+			this->tbTeamCode->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
 			// 
 			// label1
 			// 
@@ -173,19 +207,6 @@ namespace eclassroom {
 			this->label1->Size = System::Drawing::Size(49, 29);
 			this->label1->TabIndex = 3;
 			this->label1->Text = L"OR";
-			// 
-			// button2
-			// 
-			this->button2->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->button2->Location = System::Drawing::Point(444, 414);
-			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(108, 44);
-			this->button2->TabIndex = 2;
-			this->button2->Text = L"Join";
-			this->button2->UseVisualStyleBackColor = true;
-			this->button2->Click += gcnew System::EventHandler(this, &Dashboard::button1_Click);
 			// 
 			// Dashboard
 			// 
@@ -207,14 +228,110 @@ namespace eclassroom {
 
 		}
 #pragma endregion
+		
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void Dashboard_Load(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-
-		eclassroom::CreateTeam createTeam;
+		
+		eclassroom::CreateTeam createTeam(u);
 		createTeam.ShowDialog();
 	}
-	};
+	private: System::Void btnJoinTeam_Click(System::Object^ sender, System::EventArgs^ e) {
+		String^ teamCode = tbTeamCode->Text;
+		if (teamCode->Length == 0) {
+			MessageBox::Show("Please enter the team code!", "Enter Code", MessageBoxButtons::OK);
+			return;
+		}
+
+		String^ tempCode;
+
+		try {
+			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+			SqlConnection sqlConn(connString);
+			sqlConn.Open();
+
+			String^ sqlQuery = "INSERT INTO "+ teamCode + " (users) VALUES " + "(@users);";
+			SqlCommand command(sqlQuery, % sqlConn);
+			command.Parameters->AddWithValue("@users", u->email);
+			command.ExecuteNonQuery();
+
+			try {
+				String^ sqlQuery = "Select teams from users where email=@email";
+				SqlCommand command(sqlQuery, % sqlConn);
+				command.Parameters->AddWithValue("@email", u->email);
+				SqlDataReader^ reader;
+				reader = command.ExecuteReader();
+				if (reader->Read()) {
+					if (reader["teams"]->ToString() == "NULL" || reader["teams"]->ToString() == "") {
+						tempCode = "";
+					}
+					else {
+						tempCode = reader["teams"]->ToString();
+					}
+				}
+				else
+				{
+					MessageBox::Show("No data", "Failed", MessageBoxButtons::OK);
+				}
+				reader->Close();
+			}
+			catch (Exception^ ex)
+			{
+				MessageBox::Show("Failed to fetch previous codes", "Failed", MessageBoxButtons::OK);
+			}
+
+			try {
+
+				String^ sqlQuery = "UPDATE users set teams=@teams where email=@email;";
+				SqlCommand command(sqlQuery, % sqlConn);
+				command.Parameters->AddWithValue("@teams", tempCode + teamCode);
+				command.Parameters->AddWithValue("@email", u->email);
+				command.ExecuteNonQuery();
+			}
+			catch (Exception^ ex)
+			{
+				MessageBox::Show("Failed to update data", "Failed", MessageBoxButtons::OK);
+			}
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show("Failed to join the team", "Failed", MessageBoxButtons::OK);
+		}
+	}
+
+private: System::Void btnRefresh_Click(System::Object^ sender, System::EventArgs^ e) {
+	String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+	SqlConnection sqlConn(connString);
+	sqlConn.Open();
+	
+	String^ codes;
+
+	try {
+		String^ sqlQuery = "Select teams from users where email=@email";
+		SqlCommand command(sqlQuery, % sqlConn);
+		command.Parameters->AddWithValue("@email", u->email);
+		SqlDataReader^ reader;
+		reader = command.ExecuteReader();
+		if (reader->Read()) {
+			if (reader["teams"]->ToString() == "NULL" || reader["teams"]->ToString() == "") {
+				
+			}
+			else {
+				codes = reader["teams"]->ToString();
+			}
+		}
+		else
+		{
+			MessageBox::Show("No data", "Failed", MessageBoxButtons::OK);
+		}
+		reader->Close();
+	}
+	catch (Exception^ ex)
+	{
+		MessageBox::Show("Failed to fetch previous codes", "Failed", MessageBoxButtons::OK);
+	}
+
+}
+};
 }

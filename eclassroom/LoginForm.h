@@ -218,6 +218,7 @@ private: System::Void btnLogin_Click(System::Object^ sender, System::EventArgs^ 
 	}
 }
 private: System::Void btnCancel_Click(System::Object^ sender, System::EventArgs^ e) {
+	this->Close();
 }
 private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
