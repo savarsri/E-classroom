@@ -26,6 +26,88 @@ namespace eclassroom {
 			//TODO: Add the constructor code here
 			//
 			u = user;
+
+
+			String^ codes;
+			lvTeams->Items->Clear();
+
+			try {
+				String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+				SqlConnection sqlConn(connString);
+				sqlConn.Open();
+				String^ sqlQuery = "Select teams from users where email=@email";
+				SqlCommand command(sqlQuery, % sqlConn);
+				command.Parameters->AddWithValue("@email", u->email);
+				SqlDataReader^ reader;
+				reader = command.ExecuteReader();
+				if (reader->Read()) {
+					if (reader["teams"]->ToString() == "NULL" || reader["teams"]->ToString() == "") {
+
+					}
+					else {
+						codes = reader["teams"]->ToString();
+						int i = 0, a = 0;
+
+						while (a == 0) {
+
+							String^ tempCode = codes->Substring(i, 6);
+							String^ teamName;
+
+							try {
+								String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+								SqlConnection sqlConn(connString);
+								sqlConn.Open();
+								String^ sqlQuery = "Select name from " + tempCode + " where code=@code";
+								SqlCommand command(sqlQuery, % sqlConn);
+								command.Parameters->AddWithValue("@code", tempCode);
+								SqlDataReader^ reader;
+								reader = command.ExecuteReader();
+
+								if (reader->Read()) {
+									if (reader["name"]->ToString() == "NULL" || reader["name"]->ToString() == "") {
+
+									}
+									else {
+										teamName = reader["name"]->ToString();
+									}
+								}
+								else
+								{
+									MessageBox::Show("No data", "Failed", MessageBoxButtons::OK);
+								}
+								reader->Close();
+
+							}
+							catch (Exception^ ex)
+							{
+								MessageBox::Show("Failed to fetch names", "Failed", MessageBoxButtons::OK);
+							}
+
+							ListViewItem^ lvi = gcnew ListViewItem(teamName, 0);
+							lvTeams->Items->Add(lvi);
+
+							i = i + 6;
+							if (i + 6 > codes->Length)
+							{
+								a = 1;
+								break;
+							}
+
+						}
+					}
+				}
+				else
+				{
+					MessageBox::Show("No data", "Failed", MessageBoxButtons::OK);
+				}
+				reader->Close();
+			}
+			catch (Exception^ ex)
+			{
+				MessageBox::Show("Failed to fetch previous codes", "Failed", MessageBoxButtons::OK);
+			}
+
+			
 		}
 
 	protected:
@@ -52,11 +134,18 @@ namespace eclassroom {
 	private: System::Windows::Forms::Label^ label1;
 
 
-	private: System::Windows::Forms::Label^ label2;
+
 	private: System::Windows::Forms::ListView^ lvTeams;
 
 	private: System::Windows::Forms::Button^ btnJoinTeam;
 	private: System::Windows::Forms::Button^ btnRefresh;
+	private: System::Windows::Forms::ColumnHeader^ ch_name;
+private: System::Windows::Forms::Label^ label2;
+private: System::Windows::Forms::Button^ btnSend;
+private: System::Windows::Forms::RichTextBox^ tbMessage;
+private: System::Windows::Forms::ListView^ lvMessage;
+
+
 
 	protected:
 
@@ -77,10 +166,14 @@ namespace eclassroom {
 			this->lbWelcome = (gcnew System::Windows::Forms::Label());
 			this->btnNewTeam = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->btnRefresh = (gcnew System::Windows::Forms::Button());
 			this->lvTeams = (gcnew System::Windows::Forms::ListView());
-			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->ch_name = (gcnew System::Windows::Forms::ColumnHeader());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->lvMessage = (gcnew System::Windows::Forms::ListView());
+			this->btnSend = (gcnew System::Windows::Forms::Button());
+			this->tbMessage = (gcnew System::Windows::Forms::RichTextBox());
 			this->btnJoinTeam = (gcnew System::Windows::Forms::Button());
 			this->tbTeamCode = (gcnew System::Windows::Forms::TextBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
@@ -119,36 +212,13 @@ namespace eclassroom {
 			// 
 			this->panel1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel1.BackgroundImage")));
 			this->panel1->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+			this->panel1->Controls->Add(this->label2);
 			this->panel1->Controls->Add(this->btnRefresh);
 			this->panel1->Controls->Add(this->lvTeams);
-			this->panel1->Controls->Add(this->label2);
 			this->panel1->Location = System::Drawing::Point(-6, -2);
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(264, 670);
 			this->panel1->TabIndex = 3;
-			// 
-			// btnRefresh
-			// 
-			this->btnRefresh->BackColor = System::Drawing::Color::Transparent;
-			this->btnRefresh->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"btnRefresh.BackgroundImage")));
-			this->btnRefresh->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
-			this->btnRefresh->Location = System::Drawing::Point(226, 11);
-			this->btnRefresh->Name = L"btnRefresh";
-			this->btnRefresh->Size = System::Drawing::Size(29, 29);
-			this->btnRefresh->TabIndex = 2;
-			this->btnRefresh->UseVisualStyleBackColor = false;
-			this->btnRefresh->Click += gcnew System::EventHandler(this, &Dashboard::btnRefresh_Click);
-			// 
-			// lvTeams
-			// 
-			this->lvTeams->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->lvTeams->HideSelection = false;
-			this->lvTeams->Location = System::Drawing::Point(19, 44);
-			this->lvTeams->Name = L"lvTeams";
-			this->lvTeams->Size = System::Drawing::Size(236, 609);
-			this->lvTeams->TabIndex = 1;
-			this->lvTeams->UseCompatibleStateImageBehavior = false;
 			// 
 			// label2
 			// 
@@ -160,11 +230,53 @@ namespace eclassroom {
 			this->label2->Location = System::Drawing::Point(18, 11);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(88, 29);
-			this->label2->TabIndex = 0;
+			this->label2->TabIndex = 3;
 			this->label2->Text = L"Teams";
+			this->label2->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			this->label2->Click += gcnew System::EventHandler(this, &Dashboard::label2_Click);
+			// 
+			// btnRefresh
+			// 
+			this->btnRefresh->BackColor = System::Drawing::Color::Transparent;
+			this->btnRefresh->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"btnRefresh.BackgroundImage")));
+			this->btnRefresh->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
+			this->btnRefresh->Location = System::Drawing::Point(228, 11);
+			this->btnRefresh->Name = L"btnRefresh";
+			this->btnRefresh->Size = System::Drawing::Size(29, 29);
+			this->btnRefresh->TabIndex = 2;
+			this->btnRefresh->UseVisualStyleBackColor = false;
+			this->btnRefresh->Click += gcnew System::EventHandler(this, &Dashboard::btnRefresh_Click);
+			// 
+			// lvTeams
+			// 
+			this->lvTeams->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(5)), static_cast<System::Int32>(static_cast<System::Byte>(5)),
+				static_cast<System::Int32>(static_cast<System::Byte>(5)));
+			this->lvTeams->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(1) { this->ch_name });
+			this->lvTeams->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lvTeams->ForeColor = System::Drawing::Color::White;
+			this->lvTeams->HideSelection = false;
+			this->lvTeams->Location = System::Drawing::Point(12, 46);
+			this->lvTeams->MultiSelect = false;
+			this->lvTeams->Name = L"lvTeams";
+			this->lvTeams->Scrollable = false;
+			this->lvTeams->Size = System::Drawing::Size(247, 615);
+			this->lvTeams->TabIndex = 1;
+			this->lvTeams->TileSize = System::Drawing::Size(242, 35);
+			this->lvTeams->UseCompatibleStateImageBehavior = false;
+			this->lvTeams->View = System::Windows::Forms::View::Tile;
+			this->lvTeams->SelectedIndexChanged += gcnew System::EventHandler(this, &Dashboard::lvTeams_SelectedIndexChanged);
+			// 
+			// ch_name
+			// 
+			this->ch_name->Text = L"Teams";
+			this->ch_name->Width = 242;
 			// 
 			// panel2
 			// 
+			this->panel2->Controls->Add(this->lvMessage);
+			this->panel2->Controls->Add(this->btnSend);
+			this->panel2->Controls->Add(this->tbMessage);
 			this->panel2->Controls->Add(this->btnJoinTeam);
 			this->panel2->Controls->Add(this->tbTeamCode);
 			this->panel2->Controls->Add(this->label1);
@@ -173,6 +285,39 @@ namespace eclassroom {
 			this->panel2->Name = L"panel2";
 			this->panel2->Size = System::Drawing::Size(1014, 670);
 			this->panel2->TabIndex = 4;
+			// 
+			// lvMessage
+			// 
+			this->lvMessage->HideSelection = false;
+			this->lvMessage->Location = System::Drawing::Point(27, 125);
+			this->lvMessage->Name = L"lvMessage";
+			this->lvMessage->Size = System::Drawing::Size(852, 459);
+			this->lvMessage->TabIndex = 8;
+			this->lvMessage->UseCompatibleStateImageBehavior = false;
+			this->lvMessage->Visible = false;
+			// 
+			// btnSend
+			// 
+			this->btnSend->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->btnSend->Location = System::Drawing::Point(886, 606);
+			this->btnSend->Name = L"btnSend";
+			this->btnSend->Size = System::Drawing::Size(109, 47);
+			this->btnSend->TabIndex = 7;
+			this->btnSend->Text = L"Send";
+			this->btnSend->UseVisualStyleBackColor = true;
+			this->btnSend->Visible = false;
+			// 
+			// tbMessage
+			// 
+			this->tbMessage->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->tbMessage->Location = System::Drawing::Point(27, 606);
+			this->tbMessage->Name = L"tbMessage";
+			this->tbMessage->Size = System::Drawing::Size(852, 47);
+			this->tbMessage->TabIndex = 6;
+			this->tbMessage->Text = L"";
+			this->tbMessage->Visible = false;
 			// 
 			// btnJoinTeam
 			// 
@@ -294,6 +439,9 @@ namespace eclassroom {
 			{
 				MessageBox::Show("Failed to update data", "Failed", MessageBoxButtons::OK);
 			}
+			MessageBox::Show("Team Joined!", "Successful", MessageBoxButtons::OK);
+			tbTeamCode->Clear();
+			sqlConn.Close();
 		}
 		catch (Exception^ ex) {
 			MessageBox::Show("Failed to join the team", "Failed", MessageBoxButtons::OK);
@@ -301,13 +449,15 @@ namespace eclassroom {
 	}
 
 private: System::Void btnRefresh_Click(System::Object^ sender, System::EventArgs^ e) {
-	String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
-	SqlConnection sqlConn(connString);
-	sqlConn.Open();
+	
 	
 	String^ codes;
+	lvTeams->Items->Clear();
 
 	try {
+		String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+		SqlConnection sqlConn(connString);
+		sqlConn.Open();
 		String^ sqlQuery = "Select teams from users where email=@email";
 		SqlCommand command(sqlQuery, % sqlConn);
 		command.Parameters->AddWithValue("@email", u->email);
@@ -319,6 +469,53 @@ private: System::Void btnRefresh_Click(System::Object^ sender, System::EventArgs
 			}
 			else {
 				codes = reader["teams"]->ToString();
+				int i = 0, a = 0;
+
+				while (a == 0) {
+
+					String^ tempCode = codes->Substring(i, 6);
+					String^ teamName;
+
+					try {
+						String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+						SqlConnection sqlConn(connString);
+						sqlConn.Open();
+						String^ sqlQuery = "Select name from " + tempCode + " where code=@code";
+						SqlCommand command(sqlQuery, % sqlConn);
+						command.Parameters->AddWithValue("@code", tempCode);
+						SqlDataReader^ reader;
+						reader = command.ExecuteReader();
+
+						if (reader->Read()) {
+							if (reader["name"]->ToString() == "NULL" || reader["name"]->ToString() == "") {
+
+							}
+							else {
+								teamName = reader["name"]->ToString();
+							}
+						}
+						else
+						{
+							MessageBox::Show("No data", "Failed", MessageBoxButtons::OK);
+						}
+						reader->Close();
+
+					}
+					catch (Exception^ ex)
+					{
+						MessageBox::Show("Failed to fetch names", "Failed", MessageBoxButtons::OK);
+					}
+
+					ListViewItem^ lvi = gcnew ListViewItem(teamName, 0);
+					lvTeams->Items->Add(lvi);
+
+					i = i + 6;
+					if (i + 6 > codes->Length)
+					{
+						a = 1;
+						break;
+					}
+				}
 			}
 		}
 		else
@@ -332,6 +529,71 @@ private: System::Void btnRefresh_Click(System::Object^ sender, System::EventArgs
 		MessageBox::Show("Failed to fetch previous codes", "Failed", MessageBoxButtons::OK);
 	}
 
+	
+		
+}
+
+private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+	if (lvTeams->SelectedItems->Count==1)
+	{
+		tbMessage->Clear();
+		
+		String^ indexValue = lvTeams->SelectedIndices[0].ToString();
+		int index = Int64::Parse(indexValue);
+
+		String^ codes;
+
+		try {
+			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+			SqlConnection sqlConn(connString);
+			sqlConn.Open();
+			String^ sqlQuery = "Select teams from users where email=@email";
+			SqlCommand command(sqlQuery, % sqlConn);
+			command.Parameters->AddWithValue("@email", u->email);
+			SqlDataReader^ reader;
+			reader = command.ExecuteReader();
+			if (reader->Read()) {
+				if (reader["teams"]->ToString() == "NULL" || reader["teams"]->ToString() == "") {
+
+				}
+				else {
+					codes = reader["teams"]->ToString();
+				}
+			}
+			else
+			{
+				MessageBox::Show("No data", "Failed", MessageBoxButtons::OK);
+			}
+			reader->Close();
+		}
+		catch (Exception^ ex)
+		{
+			MessageBox::Show("Failed to fetch previous codes", "Failed", MessageBoxButtons::OK);
+		}
+
+		String^ tempCode = codes->Substring(index*6, 6);
+		lbWelcome->Visible = false;
+		btnNewTeam->Visible = false;
+		btnJoinTeam->Visible = false;
+		label1->Visible = false;
+		tbTeamCode->Visible = false;
+		tbMessage->Visible = true;
+		btnSend->Visible = true;
+		lvMessage->Visible = true;
+
+
+	}
+	
+}
+private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e) {
+	lbWelcome->Visible = true;
+	btnNewTeam->Visible = true;
+	btnJoinTeam->Visible = true;
+	label1->Visible = true;
+	tbTeamCode->Visible = true;
+	tbMessage->Visible = false;
+	btnSend->Visible = false;
+	lvMessage->Visible = false;
 }
 };
 }

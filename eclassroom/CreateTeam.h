@@ -192,7 +192,7 @@ private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^
 	String^ code = gcnew String(res.data());
 	String^ tempCode;
 	
-	String^ query = "CREATE TABLE " + code + "(name char(50), code char(50), createdBy char(50), users char(50), messages varchar(max));";
+	String^ query = "CREATE TABLE " + code + "(id INT IDENTITY (1, 1) NOT NULL,code varchar(50), name varchar(50), createdBy varchar(50), users varchar(50),num_message INT NOT NULL, messages varchar(max),PRIMARY KEY CLUSTERED ([Id] ASC),UNIQUE NONCLUSTERED (code ASC));";
 
 		try
 		{
@@ -243,12 +243,13 @@ private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^
 			}			
 
 			try {
-				String^ sqlQuery = "INSERT INTO " + code + " (name, code, createdBy, users) VALUES " + "(@name, @code, @createdBy, @users);";
+				String^ sqlQuery = "INSERT INTO " + code + " (name, code, createdBy, users, num_message) VALUES " + "(@name, @code, @createdBy, @users,@num_message);";
 				SqlCommand command(sqlQuery, % sqlConn);
 				command.Parameters->AddWithValue("@name", name);
 				command.Parameters->AddWithValue("@code", code);
 				command.Parameters->AddWithValue("@createdBy", u->email);
 				command.Parameters->AddWithValue("@users", u->email);
+				command.Parameters->AddWithValue("@num_message", 0);
 
 				command.ExecuteNonQuery();
 			}
