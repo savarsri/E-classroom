@@ -144,6 +144,10 @@ private: System::Windows::Forms::Label^ label2;
 private: System::Windows::Forms::Button^ btnSend;
 private: System::Windows::Forms::RichTextBox^ tbMessage;
 private: System::Windows::Forms::ListView^ lvMessage;
+private: System::Windows::Forms::Label^ lbCode;
+
+private: System::Windows::Forms::Label^ lbTeamName;
+
 
 
 
@@ -171,6 +175,8 @@ private: System::Windows::Forms::ListView^ lvMessage;
 			this->lvTeams = (gcnew System::Windows::Forms::ListView());
 			this->ch_name = (gcnew System::Windows::Forms::ColumnHeader());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->lbCode = (gcnew System::Windows::Forms::Label());
+			this->lbTeamName = (gcnew System::Windows::Forms::Label());
 			this->lvMessage = (gcnew System::Windows::Forms::ListView());
 			this->btnSend = (gcnew System::Windows::Forms::Button());
 			this->tbMessage = (gcnew System::Windows::Forms::RichTextBox());
@@ -187,7 +193,7 @@ private: System::Windows::Forms::ListView^ lvMessage;
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->lbWelcome->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 25.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lbWelcome->Location = System::Drawing::Point(264, -2);
+			this->lbWelcome->Location = System::Drawing::Point(9, -3);
 			this->lbWelcome->Name = L"lbWelcome";
 			this->lbWelcome->Size = System::Drawing::Size(994, 122);
 			this->lbWelcome->TabIndex = 0;
@@ -274,6 +280,9 @@ private: System::Windows::Forms::ListView^ lvMessage;
 			// 
 			// panel2
 			// 
+			this->panel2->Controls->Add(this->lbCode);
+			this->panel2->Controls->Add(this->lbTeamName);
+			this->panel2->Controls->Add(this->lbWelcome);
 			this->panel2->Controls->Add(this->lvMessage);
 			this->panel2->Controls->Add(this->btnSend);
 			this->panel2->Controls->Add(this->tbMessage);
@@ -285,6 +294,32 @@ private: System::Windows::Forms::ListView^ lvMessage;
 			this->panel2->Name = L"panel2";
 			this->panel2->Size = System::Drawing::Size(1014, 670);
 			this->panel2->TabIndex = 4;
+			// 
+			// lbCode
+			// 
+			this->lbCode->AutoSize = true;
+			this->lbCode->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lbCode->Location = System::Drawing::Point(27, 69);
+			this->lbCode->Name = L"lbCode";
+			this->lbCode->Size = System::Drawing::Size(48, 20);
+			this->lbCode->TabIndex = 10;
+			this->lbCode->Text = L"Code";
+			this->lbCode->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+			this->lbCode->Visible = false;
+			// 
+			// lbTeamName
+			// 
+			this->lbTeamName->AutoSize = true;
+			this->lbTeamName->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lbTeamName->Location = System::Drawing::Point(21, 24);
+			this->lbTeamName->Name = L"lbTeamName";
+			this->lbTeamName->Size = System::Drawing::Size(182, 36);
+			this->lbTeamName->TabIndex = 9;
+			this->lbTeamName->Text = L"Team Name";
+			this->lbTeamName->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+			this->lbTeamName->Visible = false;
 			// 
 			// lvMessage
 			// 
@@ -359,7 +394,6 @@ private: System::Windows::Forms::ListView^ lvMessage;
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1262, 663);
 			this->Controls->Add(this->panel1);
-			this->Controls->Add(this->lbWelcome);
 			this->Controls->Add(this->panel2);
 			this->Name = L"Dashboard";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
@@ -397,10 +431,10 @@ private: System::Windows::Forms::ListView^ lvMessage;
 			SqlConnection sqlConn(connString);
 			sqlConn.Open();
 
-			String^ sqlQuery = "INSERT INTO "+ teamCode + " (users) VALUES " + "(@users);";
-			SqlCommand command(sqlQuery, % sqlConn);
-			command.Parameters->AddWithValue("@users", u->email);
-			command.ExecuteNonQuery();
+			//String^ sqlQuery = "INSERT INTO "+ teamCode + " (users)VALUES " + "(@users);";
+			//SqlCommand command(sqlQuery, % sqlConn);
+			//command.Parameters->AddWithValue("@users", u->email);
+			//command.ExecuteNonQuery();
 
 			try {
 				String^ sqlQuery = "Select teams from users where email=@email";
@@ -572,6 +606,42 @@ private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, Syste
 		}
 
 		String^ tempCode = codes->Substring(index*6, 6);
+
+		String^ teamName;
+
+		try {
+			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+			SqlConnection sqlConn(connString);
+			sqlConn.Open();
+			String^ sqlQuery = "Select name from " + tempCode + " where code=@code";
+			SqlCommand command(sqlQuery, % sqlConn);
+			command.Parameters->AddWithValue("@code", tempCode);
+			SqlDataReader^ reader;
+			reader = command.ExecuteReader();
+
+			if (reader->Read()) {
+				if (reader["name"]->ToString() == "NULL" || reader["name"]->ToString() == "") {
+
+				}
+				else {
+					teamName = reader["name"]->ToString();
+				}
+			}
+			else
+			{
+				MessageBox::Show("No data", "Failed", MessageBoxButtons::OK);
+			}
+			reader->Close();
+
+		}
+		catch (Exception^ ex)
+		{
+			MessageBox::Show("Failed to fetch names", "Failed", MessageBoxButtons::OK);
+		}
+
+		lbTeamName->Text = teamName;
+		lbCode->Text = "Code: "+tempCode;
+
 		lbWelcome->Visible = false;
 		btnNewTeam->Visible = false;
 		btnJoinTeam->Visible = false;
@@ -580,6 +650,8 @@ private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, Syste
 		tbMessage->Visible = true;
 		btnSend->Visible = true;
 		lvMessage->Visible = true;
+		lbTeamName->Visible = true;
+		lbCode->Visible = true;
 
 
 	}
