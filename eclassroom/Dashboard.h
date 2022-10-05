@@ -57,7 +57,7 @@ namespace eclassroom {
 								String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
 								SqlConnection sqlConn(connString);
 								sqlConn.Open();
-								String^ sqlQuery = "Select name from " + tempCode + " where code=@code";
+								String^ sqlQuery = "Select name from teams where code=@code";
 								SqlCommand command(sqlQuery, % sqlConn);
 								command.Parameters->AddWithValue("@code", tempCode);
 								SqlDataReader^ reader;
@@ -65,7 +65,7 @@ namespace eclassroom {
 
 								if (reader->Read()) {
 									if (reader["name"]->ToString() == "NULL" || reader["name"]->ToString() == "") {
-
+										
 									}
 									else {
 										teamName = reader["name"]->ToString();
@@ -329,6 +329,7 @@ private: System::Windows::Forms::Label^ lbTeamName;
 			this->lvMessage->Size = System::Drawing::Size(852, 459);
 			this->lvMessage->TabIndex = 8;
 			this->lvMessage->UseCompatibleStateImageBehavior = false;
+			this->lvMessage->View = System::Windows::Forms::View::Tile;
 			this->lvMessage->Visible = false;
 			// 
 			// btnSend
@@ -342,6 +343,7 @@ private: System::Windows::Forms::Label^ lbTeamName;
 			this->btnSend->Text = L"Send";
 			this->btnSend->UseVisualStyleBackColor = true;
 			this->btnSend->Visible = false;
+			this->btnSend->Click += gcnew System::EventHandler(this, &Dashboard::btnSend_Click);
 			// 
 			// tbMessage
 			// 
@@ -514,7 +516,7 @@ private: System::Void btnRefresh_Click(System::Object^ sender, System::EventArgs
 						String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
 						SqlConnection sqlConn(connString);
 						sqlConn.Open();
-						String^ sqlQuery = "Select name from " + tempCode + " where code=@code";
+						String^ sqlQuery = "Select name from teams where code=@code";
 						SqlCommand command(sqlQuery, % sqlConn);
 						command.Parameters->AddWithValue("@code", tempCode);
 						SqlDataReader^ reader;
@@ -566,6 +568,7 @@ private: System::Void btnRefresh_Click(System::Object^ sender, System::EventArgs
 	
 		
 }
+	   public: String^ tempCode;
 
 private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 	if (lvTeams->SelectedItems->Count==1)
@@ -605,7 +608,7 @@ private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, Syste
 			MessageBox::Show("Failed to fetch previous codes", "Failed", MessageBoxButtons::OK);
 		}
 
-		String^ tempCode = codes->Substring(index*6, 6);
+		tempCode = codes->Substring(index*6, 6);
 
 		String^ teamName;
 
@@ -613,7 +616,7 @@ private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, Syste
 			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
 			SqlConnection sqlConn(connString);
 			sqlConn.Open();
-			String^ sqlQuery = "Select name from " + tempCode + " where code=@code";
+			String^ sqlQuery = "Select name from teams where code=@code";
 			SqlCommand command(sqlQuery, % sqlConn);
 			command.Parameters->AddWithValue("@code", tempCode);
 			SqlDataReader^ reader;
@@ -632,6 +635,7 @@ private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, Syste
 				MessageBox::Show("No data", "Failed", MessageBoxButtons::OK);
 			}
 			reader->Close();
+			sqlConn.Close();
 
 		}
 		catch (Exception^ ex)
@@ -666,6 +670,36 @@ private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e)
 	tbMessage->Visible = false;
 	btnSend->Visible = false;
 	lvMessage->Visible = false;
+	lbTeamName->Visible = false;
+	lbCode->Visible = false;
+}
+private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e) {
+
+	String^ message = tbMessage->Text;
+	
+
+	if (message->Length==NULL) {
+	}
+	else {
+		try {
+			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+			SqlConnection sqlConn(connString);
+			sqlConn.Open();
+			String^ sqlQuery = "INSERT INTO " + tempCode + "Message (messages) VALUES " + "(@messages);";
+			SqlCommand command(sqlQuery, % sqlConn);
+			command.Parameters->AddWithValue("@messages", message);
+			command.ExecuteNonQuery();
+			tbMessage->Clear();
+			sqlConn.Close();
+
+		}
+		catch (Exception^ ex)
+		{
+			MessageBox::Show("Failed to send message", "Failed", MessageBoxButtons::OK);
+		}
+	}
+
+	
 }
 };
 }
