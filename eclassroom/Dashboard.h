@@ -1,6 +1,7 @@
 #pragma once
 #include "User.h"
 #include "CreateTeam.h"
+#include "ctime"
 
 namespace eclassroom {
 
@@ -107,6 +108,7 @@ namespace eclassroom {
 				MessageBox::Show("Failed to fetch previous codes", "Failed", MessageBoxButtons::OK);
 			}
 
+
 			
 		}
 
@@ -147,6 +149,8 @@ private: System::Windows::Forms::ListView^ lvMessage;
 private: System::Windows::Forms::Label^ lbCode;
 
 private: System::Windows::Forms::Label^ lbTeamName;
+private: System::Windows::Forms::Button^ btnRefreshMessage;
+
 
 
 
@@ -175,6 +179,7 @@ private: System::Windows::Forms::Label^ lbTeamName;
 			this->lvTeams = (gcnew System::Windows::Forms::ListView());
 			this->ch_name = (gcnew System::Windows::Forms::ColumnHeader());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->btnRefreshMessage = (gcnew System::Windows::Forms::Button());
 			this->lbCode = (gcnew System::Windows::Forms::Label());
 			this->lbTeamName = (gcnew System::Windows::Forms::Label());
 			this->lvMessage = (gcnew System::Windows::Forms::ListView());
@@ -280,6 +285,7 @@ private: System::Windows::Forms::Label^ lbTeamName;
 			// 
 			// panel2
 			// 
+			this->panel2->Controls->Add(this->btnRefreshMessage);
 			this->panel2->Controls->Add(this->lbCode);
 			this->panel2->Controls->Add(this->lbTeamName);
 			this->panel2->Controls->Add(this->lbWelcome);
@@ -294,6 +300,16 @@ private: System::Windows::Forms::Label^ lbTeamName;
 			this->panel2->Name = L"panel2";
 			this->panel2->Size = System::Drawing::Size(1014, 670);
 			this->panel2->TabIndex = 4;
+			// 
+			// btnRefreshMessage
+			// 
+			this->btnRefreshMessage->Location = System::Drawing::Point(920, 96);
+			this->btnRefreshMessage->Name = L"btnRefreshMessage";
+			this->btnRefreshMessage->Size = System::Drawing::Size(75, 23);
+			this->btnRefreshMessage->TabIndex = 11;
+			this->btnRefreshMessage->Text = L"button1";
+			this->btnRefreshMessage->UseVisualStyleBackColor = true;
+			this->btnRefreshMessage->Click += gcnew System::EventHandler(this, &Dashboard::btnRefreshMessage_Click);
 			// 
 			// lbCode
 			// 
@@ -323,13 +339,16 @@ private: System::Windows::Forms::Label^ lbTeamName;
 			// 
 			// lvMessage
 			// 
+			this->lvMessage->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->lvMessage->HideSelection = false;
 			this->lvMessage->Location = System::Drawing::Point(27, 125);
 			this->lvMessage->Name = L"lvMessage";
-			this->lvMessage->Size = System::Drawing::Size(852, 459);
+			this->lvMessage->Size = System::Drawing::Size(968, 459);
 			this->lvMessage->TabIndex = 8;
+			this->lvMessage->TileSize = System::Drawing::Size(448, 35);
 			this->lvMessage->UseCompatibleStateImageBehavior = false;
-			this->lvMessage->View = System::Windows::Forms::View::Tile;
+			this->lvMessage->View = System::Windows::Forms::View::Details;
 			this->lvMessage->Visible = false;
 			// 
 			// btnSend
@@ -643,6 +662,8 @@ private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, Syste
 			MessageBox::Show("Failed to fetch names", "Failed", MessageBoxButtons::OK);
 		}
 
+		getMessage();
+
 		lbTeamName->Text = teamName;
 		lbCode->Text = "Code: "+tempCode;
 
@@ -676,7 +697,11 @@ private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e)
 private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e) {
 
 	String^ message = tbMessage->Text;
-	
+
+	time_t now = time(0);
+	char* dt = ctime(&now);
+	std::string str(dt);
+	String^ time = gcnew String(str.data());
 
 	if (message->Length==NULL) {
 	}
@@ -685,12 +710,15 @@ private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e
 			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
 			SqlConnection sqlConn(connString);
 			sqlConn.Open();
-			String^ sqlQuery = "INSERT INTO " + tempCode + "Message (messages) VALUES " + "(@messages);";
+			String^ sqlQuery = "INSERT INTO " + tempCode + "Message (messages,time) VALUES " + "(@messages,@time);";
 			SqlCommand command(sqlQuery, % sqlConn);
 			command.Parameters->AddWithValue("@messages", message);
+			command.Parameters->AddWithValue("@time", "Sent by: "+ u->email+" on " + time);
 			command.ExecuteNonQuery();
 			tbMessage->Clear();
 			sqlConn.Close();
+
+			getMessage();
 
 		}
 		catch (Exception^ ex)
@@ -700,6 +728,39 @@ private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e
 	}
 
 	
+}
+	   public: void getMessage() {
+		   try {
+			   lvMessage->Clear();
+			   String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+			   SqlConnection^ sqlConn = gcnew SqlConnection(connString);
+
+			   lvMessage->Columns->Add("Message", 500);
+			   lvMessage->Columns->Add("By", 70);
+			  
+			   SqlCommand^ command = gcnew SqlCommand("Select * from " + tempCode + "Message ;",sqlConn);
+			  
+			   
+			   SqlDataAdapter^ da =  gcnew SqlDataAdapter();
+			   da->SelectCommand = command;
+			   DataSet^ ds = gcnew DataSet();
+			   da->Fill(ds, "testtable");
+			   DataTable^ dt;
+			   dt = ds->Tables["testtable"];
+			   int i;
+			   for (i = 0; i < dt->Rows->Count; i++) {
+				   lvMessage->Items->Add(dt->Rows[i]->ItemArray[0]->ToString());
+				   lvMessage->Items[i]->SubItems->Add(dt->Rows[i]->ItemArray[1]->ToString());
+			   }
+			 
+
+		   }
+		   catch (Exception^ ex) {
+			   MessageBox::Show("Failed to get messages", "Failed", MessageBoxButtons::OK);
+		   }
+	   }
+private: System::Void btnRefreshMessage_Click(System::Object^ sender, System::EventArgs^ e) {
+	getMessage();
 }
 };
 }

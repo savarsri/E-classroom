@@ -151,8 +151,8 @@ namespace eclassroom {
 				static_cast<System::Int32>(static_cast<System::Byte>(255)));
 			this->ClientSize = System::Drawing::Size(482, 453);
 			this->ControlBox = false;
-			this->Controls->Add(this->btnCancel);
 			this->Controls->Add(this->btnCreate);
+			this->Controls->Add(this->btnCancel);
 			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->tbName);
@@ -192,7 +192,7 @@ private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^
 	String^ code = gcnew String(res.data());
 	String^ tempCode;
 	
-	String^ query = "CREATE TABLE " + code + "Message (messages varchar(max));";
+	String^ query = "CREATE TABLE " + code + "Message (messages varchar(max), time varchar(max);";
 
 		try
 		{
