@@ -303,12 +303,15 @@ private: System::Windows::Forms::Button^ btnRefreshMessage;
 			// 
 			// btnRefreshMessage
 			// 
-			this->btnRefreshMessage->Location = System::Drawing::Point(920, 96);
+			this->btnRefreshMessage->BackColor = System::Drawing::Color::Transparent;
+			this->btnRefreshMessage->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"btnRefreshMessage.BackgroundImage")));
+			this->btnRefreshMessage->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
+			this->btnRefreshMessage->Location = System::Drawing::Point(959, 83);
 			this->btnRefreshMessage->Name = L"btnRefreshMessage";
-			this->btnRefreshMessage->Size = System::Drawing::Size(75, 23);
+			this->btnRefreshMessage->Size = System::Drawing::Size(36, 36);
 			this->btnRefreshMessage->TabIndex = 11;
-			this->btnRefreshMessage->Text = L"button1";
-			this->btnRefreshMessage->UseVisualStyleBackColor = true;
+			this->btnRefreshMessage->UseVisualStyleBackColor = false;
+			this->btnRefreshMessage->Visible = false;
 			this->btnRefreshMessage->Click += gcnew System::EventHandler(this, &Dashboard::btnRefreshMessage_Click);
 			// 
 			// lbCode
@@ -339,7 +342,7 @@ private: System::Windows::Forms::Button^ btnRefreshMessage;
 			// 
 			// lvMessage
 			// 
-			this->lvMessage->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->lvMessage->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->lvMessage->HideSelection = false;
 			this->lvMessage->Location = System::Drawing::Point(27, 125);
@@ -677,6 +680,7 @@ private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, Syste
 		lvMessage->Visible = true;
 		lbTeamName->Visible = true;
 		lbCode->Visible = true;
+		btnRefreshMessage->Visible = true;
 
 
 	}
@@ -693,6 +697,7 @@ private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e)
 	lvMessage->Visible = false;
 	lbTeamName->Visible = false;
 	lbCode->Visible = false;
+	btnRefreshMessage->Visible = false;
 }
 private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e) {
 
@@ -735,8 +740,8 @@ private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e
 			   String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
 			   SqlConnection^ sqlConn = gcnew SqlConnection(connString);
 
-			   lvMessage->Columns->Add("Message", 500);
-			   lvMessage->Columns->Add("By", 70);
+			   lvMessage->Columns->Add("Message", 400);
+			   lvMessage->Columns->Add("By", 350);
 			  
 			   SqlCommand^ command = gcnew SqlCommand("Select * from " + tempCode + "Message ;",sqlConn);
 			  

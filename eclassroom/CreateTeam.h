@@ -192,7 +192,7 @@ private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^
 	String^ code = gcnew String(res.data());
 	String^ tempCode;
 	
-	String^ query = "CREATE TABLE " + code + "Message (messages varchar(max), time varchar(max);";
+	String^ query = "CREATE TABLE " + code + "Message (messages varchar(max), time varchar(max));";
 
 		try
 		{
