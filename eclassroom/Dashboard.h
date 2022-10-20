@@ -74,9 +74,10 @@ namespace eclassroom {
 								}
 								else
 								{
-									MessageBox::Show("No data", "Failed", MessageBoxButtons::OK);
+									MessageBox::Show("No Hello data", "Failed", MessageBoxButtons::OK);
 								}
 								reader->Close();
+								sqlConn.Close();
 
 							}
 							catch (Exception^ ex)
@@ -532,6 +533,7 @@ private: System::Void btnRefresh_Click(System::Object^ sender, System::EventArgs
 				while (a == 0) {
 
 					String^ tempCode = codes->Substring(i, 6);
+					tempCode = tempCode->Trim();
 					String^ teamName;
 
 					try {
@@ -554,9 +556,10 @@ private: System::Void btnRefresh_Click(System::Object^ sender, System::EventArgs
 						}
 						else
 						{
-							MessageBox::Show("No data", "Failed", MessageBoxButtons::OK);
+							MessageBox::Show("No Team name", "Failed", MessageBoxButtons::OK);
 						}
-						reader->Close();
+
+						sqlConn.Close();
 
 					}
 					catch (Exception^ ex)

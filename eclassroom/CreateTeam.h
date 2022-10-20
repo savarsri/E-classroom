@@ -243,10 +243,10 @@ private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^
 			}			
 
 			try {
-				String^ sqlQuery = "INSERT INTO teams (name, code, createdBy) VALUES " + "(@name, @code, @createdBy);";
+				String^ sqlQuery = "INSERT INTO teams (code, name, createdBy) VALUES " + "(@code, @name, @createdBy);";
 				SqlCommand command(sqlQuery, % sqlConn);
-				command.Parameters->AddWithValue("@name", name);
 				command.Parameters->AddWithValue("@code", code);
+				command.Parameters->AddWithValue("@name", name);
 				command.Parameters->AddWithValue("@createdBy", u->email);
 				command.ExecuteNonQuery();
 			}
