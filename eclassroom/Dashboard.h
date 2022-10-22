@@ -151,6 +151,9 @@ private: System::Windows::Forms::Label^ lbCode;
 
 private: System::Windows::Forms::Label^ lbTeamName;
 private: System::Windows::Forms::Button^ btnRefreshMessage;
+private: System::Windows::Forms::Button^ btnMessAssign;
+
+
 
 
 
@@ -180,6 +183,7 @@ private: System::Windows::Forms::Button^ btnRefreshMessage;
 			this->lvTeams = (gcnew System::Windows::Forms::ListView());
 			this->ch_name = (gcnew System::Windows::Forms::ColumnHeader());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->btnMessAssign = (gcnew System::Windows::Forms::Button());
 			this->btnRefreshMessage = (gcnew System::Windows::Forms::Button());
 			this->lbCode = (gcnew System::Windows::Forms::Label());
 			this->lbTeamName = (gcnew System::Windows::Forms::Label());
@@ -205,7 +209,6 @@ private: System::Windows::Forms::Button^ btnRefreshMessage;
 			this->lbWelcome->TabIndex = 0;
 			this->lbWelcome->Text = L"Welcome";
 			this->lbWelcome->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
-			this->lbWelcome->Click += gcnew System::EventHandler(this, &Dashboard::label1_Click);
 			// 
 			// btnNewTeam
 			// 
@@ -286,6 +289,8 @@ private: System::Windows::Forms::Button^ btnRefreshMessage;
 			// 
 			// panel2
 			// 
+			this->panel2->BackColor = System::Drawing::Color::MistyRose;
+			this->panel2->Controls->Add(this->btnMessAssign);
 			this->panel2->Controls->Add(this->btnRefreshMessage);
 			this->panel2->Controls->Add(this->lbCode);
 			this->panel2->Controls->Add(this->lbTeamName);
@@ -301,6 +306,20 @@ private: System::Windows::Forms::Button^ btnRefreshMessage;
 			this->panel2->Name = L"panel2";
 			this->panel2->Size = System::Drawing::Size(1014, 670);
 			this->panel2->TabIndex = 4;
+			// 
+			// btnMessAssign
+			// 
+			this->btnMessAssign->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->btnMessAssign->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->btnMessAssign->Location = System::Drawing::Point(832, 27);
+			this->btnMessAssign->Name = L"btnMessAssign";
+			this->btnMessAssign->Size = System::Drawing::Size(163, 50);
+			this->btnMessAssign->TabIndex = 12;
+			this->btnMessAssign->Text = L"Assignments";
+			this->btnMessAssign->UseVisualStyleBackColor = true;
+			this->btnMessAssign->Visible = false;
+			this->btnMessAssign->Click += gcnew System::EventHandler(this, &Dashboard::btnMessAssign_Click);
 			// 
 			// btnRefreshMessage
 			// 
@@ -346,7 +365,7 @@ private: System::Windows::Forms::Button^ btnRefreshMessage;
 			this->lvMessage->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->lvMessage->HideSelection = false;
-			this->lvMessage->Location = System::Drawing::Point(27, 125);
+			this->lvMessage->Location = System::Drawing::Point(19, 125);
 			this->lvMessage->Name = L"lvMessage";
 			this->lvMessage->Size = System::Drawing::Size(968, 459);
 			this->lvMessage->TabIndex = 8;
@@ -359,7 +378,7 @@ private: System::Windows::Forms::Button^ btnRefreshMessage;
 			// 
 			this->btnSend->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btnSend->Location = System::Drawing::Point(886, 606);
+			this->btnSend->Location = System::Drawing::Point(880, 606);
 			this->btnSend->Name = L"btnSend";
 			this->btnSend->Size = System::Drawing::Size(109, 47);
 			this->btnSend->TabIndex = 7;
@@ -372,7 +391,7 @@ private: System::Windows::Forms::Button^ btnRefreshMessage;
 			// 
 			this->tbMessage->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->tbMessage->Location = System::Drawing::Point(27, 606);
+			this->tbMessage->Location = System::Drawing::Point(19, 606);
 			this->tbMessage->Name = L"tbMessage";
 			this->tbMessage->Size = System::Drawing::Size(852, 47);
 			this->tbMessage->TabIndex = 6;
@@ -433,8 +452,7 @@ private: System::Windows::Forms::Button^ btnRefreshMessage;
 		}
 #pragma endregion
 		
-	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
-	}
+	
 	private: System::Void Dashboard_Load(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -594,11 +612,15 @@ private: System::Void btnRefresh_Click(System::Object^ sender, System::EventArgs
 		
 }
 	   public: String^ tempCode;
+	public: String^ createdBy;
+
 
 private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 	if (lvTeams->SelectedItems->Count==1)
 	{
 		tbMessage->Clear();
+		btnMessAssign->Text = "Assignments";
+		btnSend->Text = "Send";
 		
 		String^ indexValue = lvTeams->SelectedIndices[0].ToString();
 		int index = Int64::Parse(indexValue);
@@ -668,6 +690,37 @@ private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, Syste
 			MessageBox::Show("Failed to fetch names", "Failed", MessageBoxButtons::OK);
 		}
 
+		try {
+			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+			SqlConnection sqlConn(connString);
+			sqlConn.Open();
+			String^ sqlQuery = "Select createdBy from teams where code=@code";
+			SqlCommand command(sqlQuery, % sqlConn);
+			command.Parameters->AddWithValue("@code", tempCode);
+			SqlDataReader^ reader;
+			reader = command.ExecuteReader();
+
+			if (reader->Read()) {
+				if (reader["createdBy"]->ToString() == "NULL" || reader["createdBy"]->ToString() == "") {
+
+				}
+				else {
+					createdBy = reader["createdBy"]->ToString();
+				}
+			}
+			else
+			{
+				MessageBox::Show("No data", "Failed", MessageBoxButtons::OK);
+			}
+			reader->Close();
+			sqlConn.Close();
+
+		}
+		catch (Exception^ ex)
+		{
+			MessageBox::Show("Failed to fetch owner", "Failed", MessageBoxButtons::OK);
+		}
+
 		getMessage();
 
 		lbTeamName->Text = teamName;
@@ -684,6 +737,7 @@ private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, Syste
 		lbTeamName->Visible = true;
 		lbCode->Visible = true;
 		btnRefreshMessage->Visible = true;
+		btnMessAssign->Visible = true;
 
 
 	}
@@ -701,6 +755,7 @@ private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e)
 	lbTeamName->Visible = false;
 	lbCode->Visible = false;
 	btnRefreshMessage->Visible = false;
+	btnMessAssign->Visible = false;
 }
 private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e) {
 
@@ -769,6 +824,33 @@ private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e
 	   }
 private: System::Void btnRefreshMessage_Click(System::Object^ sender, System::EventArgs^ e) {
 	getMessage();
+}
+
+private: System::Void btnMessAssign_Click(System::Object^ sender, System::EventArgs^ e) {
+	if (btnMessAssign->Text == "Assignments") {
+		btnMessAssign->Text = "Messages";
+		btnSend->Text = "Create";
+		tbMessage->Visible = false;
+		btnRefreshMessage->Visible = false;
+		lvMessage->Clear();
+		if (createdBy == u->email) {
+			btnSend->Visible = true;
+		}
+		else {
+			btnSend->Visible = false;
+		}
+	}
+	else {
+		btnMessAssign->Text = "Assignments";
+		btnSend->Text = "Send";
+		btnSend->Visible = true;
+		tbMessage->Visible = true;
+		btnRefreshMessage->Visible = true;
+		lvMessage->Clear();
+		getMessage();
+	}
+}
+private: System::Void dateTimePicker1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

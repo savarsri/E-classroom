@@ -263,6 +263,25 @@ private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^
 		{
 			MessageBox::Show("Failed to create team", "Failed", MessageBoxButtons::OK);
 		}
+
+		try {
+			query = "CREATE TABLE " + code + "Assignment (title varchar(50), description varchar(max), );";
+			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+			SqlConnection sqlConn(connString);
+			sqlConn.Open();
+
+			String^ sqlQuery = query;
+			SqlCommand command(sqlQuery, % sqlConn);
+			command.ExecuteNonQuery();
+
+			sqlConn.Close();
+			this->Close();
+
+		}
+		catch (Exception^ ex) 
+		{
+			MessageBox::Show("Failed to create team", "Failed", MessageBoxButtons::OK);
+		}
 	
 
 }
