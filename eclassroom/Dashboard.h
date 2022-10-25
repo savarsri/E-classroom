@@ -1,6 +1,9 @@
 #pragma once
 #include "User.h"
 #include "CreateTeam.h"
+#include "CreateAssignment.h"
+#include "SubmitAssignment.h"
+#include "UpdateAssignment.h"
 #include "ctime"
 
 namespace eclassroom {
@@ -152,6 +155,9 @@ private: System::Windows::Forms::Label^ lbCode;
 private: System::Windows::Forms::Label^ lbTeamName;
 private: System::Windows::Forms::Button^ btnRefreshMessage;
 private: System::Windows::Forms::Button^ btnMessAssign;
+private: System::Windows::Forms::Button^ btnCreate;
+private: System::Windows::Forms::ListView^ lvAssignment;
+
 
 
 
@@ -187,7 +193,9 @@ private: System::Windows::Forms::Button^ btnMessAssign;
 			this->btnRefreshMessage = (gcnew System::Windows::Forms::Button());
 			this->lbCode = (gcnew System::Windows::Forms::Label());
 			this->lbTeamName = (gcnew System::Windows::Forms::Label());
+			this->lvAssignment = (gcnew System::Windows::Forms::ListView());
 			this->lvMessage = (gcnew System::Windows::Forms::ListView());
+			this->btnCreate = (gcnew System::Windows::Forms::Button());
 			this->btnSend = (gcnew System::Windows::Forms::Button());
 			this->tbMessage = (gcnew System::Windows::Forms::RichTextBox());
 			this->btnJoinTeam = (gcnew System::Windows::Forms::Button());
@@ -295,7 +303,9 @@ private: System::Windows::Forms::Button^ btnMessAssign;
 			this->panel2->Controls->Add(this->lbCode);
 			this->panel2->Controls->Add(this->lbTeamName);
 			this->panel2->Controls->Add(this->lbWelcome);
+			this->panel2->Controls->Add(this->lvAssignment);
 			this->panel2->Controls->Add(this->lvMessage);
+			this->panel2->Controls->Add(this->btnCreate);
 			this->panel2->Controls->Add(this->btnSend);
 			this->panel2->Controls->Add(this->tbMessage);
 			this->panel2->Controls->Add(this->btnJoinTeam);
@@ -360,6 +370,22 @@ private: System::Windows::Forms::Button^ btnMessAssign;
 			this->lbTeamName->TextAlign = System::Drawing::ContentAlignment::TopCenter;
 			this->lbTeamName->Visible = false;
 			// 
+			// lvAssignment
+			// 
+			this->lvAssignment->Activation = System::Windows::Forms::ItemActivation::OneClick;
+			this->lvAssignment->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lvAssignment->HideSelection = false;
+			this->lvAssignment->Location = System::Drawing::Point(19, 125);
+			this->lvAssignment->Name = L"lvAssignment";
+			this->lvAssignment->Size = System::Drawing::Size(968, 459);
+			this->lvAssignment->TabIndex = 8;
+			this->lvAssignment->TileSize = System::Drawing::Size(448, 35);
+			this->lvAssignment->UseCompatibleStateImageBehavior = false;
+			this->lvAssignment->View = System::Windows::Forms::View::Details;
+			this->lvAssignment->Visible = false;
+			this->lvAssignment->SelectedIndexChanged += gcnew System::EventHandler(this, &Dashboard::lvAssignment_SelectedIndexChanged);
+			// 
 			// lvMessage
 			// 
 			this->lvMessage->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
@@ -373,6 +399,19 @@ private: System::Windows::Forms::Button^ btnMessAssign;
 			this->lvMessage->UseCompatibleStateImageBehavior = false;
 			this->lvMessage->View = System::Windows::Forms::View::Details;
 			this->lvMessage->Visible = false;
+			// 
+			// btnCreate
+			// 
+			this->btnCreate->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->btnCreate->Location = System::Drawing::Point(880, 606);
+			this->btnCreate->Name = L"btnCreate";
+			this->btnCreate->Size = System::Drawing::Size(109, 47);
+			this->btnCreate->TabIndex = 7;
+			this->btnCreate->Text = L"Create";
+			this->btnCreate->UseVisualStyleBackColor = true;
+			this->btnCreate->Visible = false;
+			this->btnCreate->Click += gcnew System::EventHandler(this, &Dashboard::btnCreate_Click);
 			// 
 			// btnSend
 			// 
@@ -439,6 +478,7 @@ private: System::Windows::Forms::Button^ btnMessAssign;
 			this->ClientSize = System::Drawing::Size(1262, 663);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->panel2);
+			this->MaximizeBox = false;
 			this->Name = L"Dashboard";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Dashboard";
@@ -756,6 +796,8 @@ private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e)
 	lbCode->Visible = false;
 	btnRefreshMessage->Visible = false;
 	btnMessAssign->Visible = false;
+	lvAssignment->Visible = false;
+	btnCreate->Visible = false;
 }
 private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e) {
 
@@ -822,35 +864,99 @@ private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e
 			   MessageBox::Show("Failed to get messages", "Failed", MessageBoxButtons::OK);
 		   }
 	   }
+
+			 public: void getAssignment() {
+				 try {
+					 lvAssignment->Clear();
+					 String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+					 SqlConnection^ sqlConn = gcnew SqlConnection(connString);
+					 sqlConn->Open();
+
+					 lvAssignment->Columns->Add("Assignment", 420);
+					 lvAssignment->Columns->Add("Due Date", 150);
+					 lvAssignment->Columns->Add("Due Time", 150);
+					 
+
+					 SqlCommand^ command = gcnew SqlCommand("Select title, dueDate, dueTime from " + tempCode + "Assignment ;", sqlConn);
+
+
+					 SqlDataAdapter^ da = gcnew SqlDataAdapter();
+					 da->SelectCommand = command;
+					 DataSet^ ds = gcnew DataSet();
+					 da->Fill(ds, "testtable");
+					 DataTable^ dt;
+					 dt = ds->Tables["testtable"];
+					 int i;
+					 for (i = 0; i < dt->Rows->Count; i++) {
+						 lvAssignment->Items->Add(dt->Rows[i]->ItemArray[0]->ToString());
+						 lvAssignment->Items[i]->SubItems->Add(dt->Rows[i]->ItemArray[1]->ToString());
+						 lvAssignment->Items[i]->SubItems->Add(dt->Rows[i]->ItemArray[2]->ToString());
+					 }
+
+
+				 }
+				 catch (Exception^ ex) {
+					 MessageBox::Show("Failed to get assignment", "Failed", MessageBoxButtons::OK);
+				 }
+			 }
+
 private: System::Void btnRefreshMessage_Click(System::Object^ sender, System::EventArgs^ e) {
 	getMessage();
+}
+
+private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^ e) {
+	eclassroom::CreateAssignment createAssignment(u,tempCode);
+	createAssignment.ShowDialog();
 }
 
 private: System::Void btnMessAssign_Click(System::Object^ sender, System::EventArgs^ e) {
 	if (btnMessAssign->Text == "Assignments") {
 		btnMessAssign->Text = "Messages";
-		btnSend->Text = "Create";
+		btnSend->Visible = false;
 		tbMessage->Visible = false;
+		lvAssignment->Visible = true;
+		lvMessage->Visible = false;
 		btnRefreshMessage->Visible = false;
 		lvMessage->Clear();
+		getAssignment();
 		if (createdBy == u->email) {
-			btnSend->Visible = true;
+			btnCreate->Visible = true;
 		}
 		else {
-			btnSend->Visible = false;
+			btnCreate->Visible = false;
 		}
 	}
 	else {
 		btnMessAssign->Text = "Assignments";
-		btnSend->Text = "Send";
 		btnSend->Visible = true;
 		tbMessage->Visible = true;
 		btnRefreshMessage->Visible = true;
+		lvAssignment->Visible = false;
+		lvMessage->Visible = true;
 		lvMessage->Clear();
 		getMessage();
 	}
 }
-private: System::Void dateTimePicker1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+
+private: System::Void lvAssignment_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+	if (lvTeams->SelectedItems->Count == 1)
+	{
+
+		String^ indexValue = lvTeams->SelectedIndices[0].ToString();
+		int index = Int64::Parse(indexValue);
+		int id = index + 1;
+
+		
+
+		if (u->email == createdBy) {
+			eclassroom::UpdateAssignment updateAssignment(u, tempCode, id);
+			updateAssignment.ShowDialog();
+		}
+		else {
+			eclassroom::SubmitAssignment submitAssignment(u, tempCode, id);
+			submitAssignment.ShowDialog();
+		}
+	}
 }
 };
 }

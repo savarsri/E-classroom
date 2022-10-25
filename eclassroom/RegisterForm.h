@@ -295,6 +295,8 @@ private: System::Void btnRegister_Click(System::Object^ sender, System::EventArg
 		return;
 	}
 
+	email = email->ToLower();
+
 	try {
 		String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
 		SqlConnection sqlConn(connString);

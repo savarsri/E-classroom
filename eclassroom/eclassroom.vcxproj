@@ -122,13 +122,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CreateAssignment.cpp" />
     <ClCompile Include="CreateTeam.cpp" />
     <ClCompile Include="Dashboard.cpp" />
     <ClCompile Include="LoginForm.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RegisterForm.cpp" />
+    <ClCompile Include="SubmitAssignment.cpp" />
+    <ClCompile Include="UpdateAssignment.cpp" />
+    <ClCompile Include="ViewAssignment.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CreateAssignment.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="CreateTeam.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -141,9 +148,24 @@
     <ClInclude Include="RegisterForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="SubmitAssignment.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="UpdateAssignment.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="User.h" />
+    <ClInclude Include="ViewAssignment.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="ViewAssignment1.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CreateAssignment.resx">
+      <DependentUpon>CreateAssignment.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CreateTeam.resx">
       <DependentUpon>CreateTeam.h</DependentUpon>
     </EmbeddedResource>
@@ -155,6 +177,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RegisterForm.resx">
       <DependentUpon>RegisterForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubmitAssignment.resx">
+      <DependentUpon>SubmitAssignment.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UpdateAssignment.resx">
+      <DependentUpon>UpdateAssignment.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewAssignment.resx">
+      <DependentUpon>ViewAssignment.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

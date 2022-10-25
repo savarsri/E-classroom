@@ -192,10 +192,10 @@ private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^
 	String^ code = gcnew String(res.data());
 	String^ tempCode;
 	
-	String^ query = "CREATE TABLE " + code + "Message (messages varchar(max), time varchar(max));";
 
 		try
 		{
+			String^ query = "CREATE TABLE " + code + "Message (messages varchar(max), time varchar(max));";
 			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
 			SqlConnection sqlConn(connString);
 			sqlConn.Open();
@@ -256,16 +256,15 @@ private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^
 			}
 
 			sqlConn.Close();
-			this->Close();
 
 		}
 		catch (Exception^ ex)
 		{
-			MessageBox::Show("Failed to create team", "Failed", MessageBoxButtons::OK);
+			//MessageBox::Show("Failed to create team message", "Failed", MessageBoxButtons::OK);
 		}
 
 		try {
-			query = "CREATE TABLE " + code + "Assignment (title varchar(50), description varchar(max), );";
+			String^ query = "CREATE TABLE " + code + "Assignment (id int IDENTITY(1,1) NOT NULL,title varchar(50) NOT NULL, description varchar(max) NOT NULL, dueDate varchar(50) NOT NULL, dueTime varchar(50) NOT NULL, link varchar(max) NOT NULL, submitBy varchar(max), PRIMARY KEY CLUSTERED ([Id] ASC));";
 			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
 			SqlConnection sqlConn(connString);
 			sqlConn.Open();
@@ -280,7 +279,7 @@ private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^
 		}
 		catch (Exception^ ex) 
 		{
-			MessageBox::Show("Failed to create team", "Failed", MessageBoxButtons::OK);
+			MessageBox::Show("Failed to create room. Try Again!", "Failed", MessageBoxButtons::OK);
 		}
 	
 
