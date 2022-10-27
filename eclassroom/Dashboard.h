@@ -495,11 +495,28 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 	
 	private: System::Void Dashboard_Load(System::Object^ sender, System::EventArgs^ e) {
 	}
+
+		   /*
+		   ######################################################
+
+		   CREATE TEAM FUNCTION
+
+		   ######################################################
+		   */
+
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 		
 		eclassroom::CreateTeam createTeam(u);
 		createTeam.ShowDialog();
 	}
+
+		   /*
+		   ######################################################
+		   
+		   JOIN TEAM FUNCTION
+		   
+		   ######################################################
+		   */
 	private: System::Void btnJoinTeam_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ teamCode = tbTeamCode->Text;
 		if (teamCode->Length == 0) {
@@ -513,11 +530,6 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
 			SqlConnection sqlConn(connString);
 			sqlConn.Open();
-
-			//String^ sqlQuery = "INSERT INTO "+ teamCode + " (users)VALUES " + "(@users);";
-			//SqlCommand command(sqlQuery, % sqlConn);
-			//command.Parameters->AddWithValue("@users", u->email);
-			//command.ExecuteNonQuery();
 
 			try {
 				String^ sqlQuery = "Select teams from users where email=@email";

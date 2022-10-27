@@ -1,5 +1,8 @@
 #pragma once
+//compile with: /clr
 #include "User.h"
+#include <string>
+
 
 namespace eclassroom {
 
@@ -10,6 +13,8 @@ namespace eclassroom {
 	using namespace System::Data;
 	using namespace System::Drawing;
 	using namespace System::Data::SqlClient;
+	using namespace std;
+
 
 
 	/// <summary>
@@ -24,19 +29,18 @@ namespace eclassroom {
 		String^ title;
 		String^ description;
 		String^ due;
-	private: System::Windows::Forms::RichTextBox^ richTextBox1;
+	
 	public:
 		String^ link;
+		String^ submitBy;
 	
 		   
-		SubmitAssignment(User^ user, String^ teamCode, int id)
+		SubmitAssignment(User^ user, String^ teamCode, int x)
 		{
 			InitializeComponent();
 			u = user;
 			code = teamCode;
-			id = id;
-
-			MessageBox::Show(id.ToString(), "id");
+			id = x;
 
 			try {
 				String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
@@ -74,8 +78,42 @@ namespace eclassroom {
 				sqlConn.Close();
 			}
 			catch (Exception^ ex) {
-
+				MessageBox::Show("Failed to load assignment", "Failed", MessageBoxButtons::OK);
 			}
+
+			try {
+				String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+				SqlConnection sqlConn(connString);
+				sqlConn.Open();
+
+				String^ sqlQuery = "Select submitBy from "+code+"Assignment where id=@id";
+				SqlCommand command(sqlQuery, % sqlConn);
+				command.Parameters->AddWithValue("@id", id);
+				SqlDataReader^ reader;
+				reader = command.ExecuteReader();
+				if (reader->Read()) {
+					if (reader["submitBy"]->ToString() == "NULL" || reader["submitBy"]->ToString() == "") {
+						submitBy = "";
+					}
+					else {
+						submitBy = reader["submitBy"]->ToString();
+					}
+				}
+				else
+				{
+					MessageBox::Show("No data", "Failed", MessageBoxButtons::OK);
+				}
+				reader->Close();
+			}
+			catch (Exception^ ex) {
+				MessageBox::Show(ex->ToString(), "Failed", MessageBoxButtons::OK);
+			}
+
+			if (submitBy->Contains(u->email->ToString())) {
+				btnSubmit->Text = "Undo Submit";
+			}
+
+
 		}
 
 	protected:
@@ -91,7 +129,7 @@ namespace eclassroom {
 		}
 
 	private: System::Windows::Forms::Label^ lbTitle;
-
+	private: System::Windows::Forms::RichTextBox^ richTextBox1;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Label^ lbDue;
@@ -184,7 +222,7 @@ namespace eclassroom {
 				static_cast<System::Byte>(0)));
 			this->btnSubmit->Location = System::Drawing::Point(243, 413);
 			this->btnSubmit->Name = L"btnSubmit";
-			this->btnSubmit->Size = System::Drawing::Size(107, 50);
+			this->btnSubmit->Size = System::Drawing::Size(183, 72);
 			this->btnSubmit->TabIndex = 2;
 			this->btnSubmit->Text = L"Submit";
 			this->btnSubmit->UseVisualStyleBackColor = true;
@@ -238,7 +276,66 @@ namespace eclassroom {
 		this->Close();
 	}
 private: System::Void btnSubmit_Click(System::Object^ sender, System::EventArgs^ e) {
-	MessageBox::Show(id.ToString(), "id");
+
+	if (btnSubmit->Text == "Submit" || btnSubmit->Text == "Submit late") {
+
+		submitBy = submitBy + u->email;
+		try {
+			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+			SqlConnection sqlConn(connString);
+			sqlConn.Open();
+
+			String^ sqlQuery = "UPDATE " + code + "Assignment set submitBy=@sby where id=@id";
+			SqlCommand command(sqlQuery, % sqlConn);
+			command.Parameters->AddWithValue("@sby", submitBy);
+			command.Parameters->AddWithValue("@id", id);
+			command.ExecuteNonQuery();
+
+			sqlConn.Close();
+			this->Close();
+
+			btnSubmit->Text = "Undo Submit";
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show(ex->ToString(), "Failed", MessageBoxButtons::OK);
+		}
+	}
+	else if (btnSubmit->Text=="Undo Submit")
+	{
+		int start;
+		String^ newTemp;
+		if (start < 0) {
+		}
+		else {
+			start = submitBy->IndexOf(u->email->ToString());
+			newTemp = submitBy->Remove(start, u->email->Length);
+		}
+
+		try {
+			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
+			SqlConnection sqlConn(connString);
+			sqlConn.Open();
+
+			String^ sqlQuery = "UPDATE " + code + "Assignment set submitBy=@sby where id=@id";
+			SqlCommand command(sqlQuery, % sqlConn);
+			command.Parameters->AddWithValue("@sby", newTemp);
+			command.Parameters->AddWithValue("@id", id);
+			command.ExecuteNonQuery();
+
+			sqlConn.Close();
+			this->Close();
+
+			btnSubmit->Text = "Submit";
+
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show(ex->ToString(), "Failed", MessageBoxButtons::OK);
+		}
+		
+		
+	}
+
+	
 }
 };
 }

@@ -27,12 +27,12 @@ namespace eclassroom {
 		String^ dueTime;
 		String^ link;
 
-		UpdateAssignment(User^ user, String^ teamCode, int id)
+		UpdateAssignment(User^ user, String^ teamCode, int x)
 		{
 			InitializeComponent();
 			u = user;
 			code = teamCode;
-			id = id;
+			id = x;
 
 
 			try {
@@ -292,8 +292,6 @@ private: System::Void btnModify_Click(System::Object^ sender, System::EventArgs^
 	String^ title = tbTitle->Text;
 	String^ description = tbDescription->Text;
 	String^ link = tbLink->Text;
-
-	id = id + 1;
 
 
 	if (date->Length == 0 || time->Length == 0 || title->Length == 0 || description->Length == 0 || link->Length == 0) {
