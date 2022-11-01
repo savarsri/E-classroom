@@ -702,6 +702,8 @@ private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, Syste
 		String^ indexValue = lvTeams->SelectedIndices[0].ToString();
 		int index = Int64::Parse(indexValue);
 
+
+
 		String^ codes;
 
 		try {
@@ -978,21 +980,19 @@ private: System::Void btnMessAssign_Click(System::Object^ sender, System::EventA
 }
 
 private: System::Void lvAssignment_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
-	if (lvTeams->SelectedItems->Count == 1)
+	if (lvAssignment->SelectedItems->Count == 1)
 	{
 
-		String^ indexValue = lvTeams->SelectedIndices[0].ToString();
-		int index = Int64::Parse(indexValue);
-		int id = index + 1;
+		String^ indexVal = lvAssignment->SelectedIndices[0].ToString();
+		int id = Int64::Parse(indexVal);
 
-		
 
 		if (u->email == createdBy) {
-			eclassroom::UpdateAssignment updateAssignment(u, tempCode, id);
+			eclassroom::UpdateAssignment updateAssignment(u, tempCode, id+1);
 			updateAssignment.ShowDialog();
 		}
 		else {
-			eclassroom::SubmitAssignment submitAssignment(u, tempCode, id);
+			eclassroom::SubmitAssignment submitAssignment(u, tempCode, id+1);
 			submitAssignment.ShowDialog();
 		}
 	}
