@@ -277,6 +277,7 @@ namespace eclassroom {
 			this->Name = L"UpdateAssignment";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Modify Assignment";
+			this->Load += gcnew System::EventHandler(this, &UpdateAssignment::UpdateAssignment_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -325,6 +326,8 @@ private: System::Void btnModify_Click(System::Object^ sender, System::EventArgs^
 		}
 	}
 
+}
+private: System::Void UpdateAssignment_Load(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

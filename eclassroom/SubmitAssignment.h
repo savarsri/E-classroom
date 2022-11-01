@@ -218,9 +218,9 @@ namespace eclassroom {
 			// 
 			// btnSubmit
 			// 
-			this->btnSubmit->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->btnSubmit->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btnSubmit->Location = System::Drawing::Point(243, 413);
+			this->btnSubmit->Location = System::Drawing::Point(224, 413);
 			this->btnSubmit->Name = L"btnSubmit";
 			this->btnSubmit->Size = System::Drawing::Size(183, 72);
 			this->btnSubmit->TabIndex = 2;
@@ -232,9 +232,9 @@ namespace eclassroom {
 			// 
 			this->btnCancel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btnCancel->Location = System::Drawing::Point(512, 413);
+			this->btnCancel->Location = System::Drawing::Point(470, 412);
 			this->btnCancel->Name = L"btnCancel";
-			this->btnCancel->Size = System::Drawing::Size(107, 50);
+			this->btnCancel->Size = System::Drawing::Size(183, 72);
 			this->btnCancel->TabIndex = 2;
 			this->btnCancel->Text = L"Cancel";
 			this->btnCancel->UseVisualStyleBackColor = true;
@@ -267,6 +267,7 @@ namespace eclassroom {
 			this->Name = L"SubmitAssignment";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Assignment";
+			this->Load += gcnew System::EventHandler(this, &SubmitAssignment::SubmitAssignment_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -336,6 +337,8 @@ private: System::Void btnSubmit_Click(System::Object^ sender, System::EventArgs^
 	}
 
 	
+}
+private: System::Void SubmitAssignment_Load(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

@@ -242,6 +242,7 @@ namespace eclassroom {
 			this->Controls->Add(this->label1);
 			this->Name = L"CreateAssignment";
 			this->Text = L"Create Assignment";
+			this->Load += gcnew System::EventHandler(this, &CreateAssignment::CreateAssignment_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -290,6 +291,8 @@ namespace eclassroom {
 	}
 private: System::Void btnCancelAssignment_Click(System::Object^ sender, System::EventArgs^ e) {
 	this->Close();
+}
+private: System::Void CreateAssignment_Load(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

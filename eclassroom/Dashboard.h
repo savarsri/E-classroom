@@ -30,6 +30,7 @@ namespace eclassroom {
 			//TODO: Add the constructor code here
 			//
 			u = user;
+			
 
 
 			String^ codes;
@@ -165,6 +166,7 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 
 
 
+
 	protected:
 
 	private:
@@ -209,14 +211,17 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			// 
 			this->lbWelcome->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
-			this->lbWelcome->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 25.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->lbWelcome->Font = (gcnew System::Drawing::Font(L"Consolas", 25.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lbWelcome->Location = System::Drawing::Point(9, -3);
+			this->lbWelcome->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(98)), static_cast<System::Int32>(static_cast<System::Byte>(124)),
+				static_cast<System::Int32>(static_cast<System::Byte>(68)));
+			this->lbWelcome->Location = System::Drawing::Point(404, 11);
 			this->lbWelcome->Name = L"lbWelcome";
-			this->lbWelcome->Size = System::Drawing::Size(994, 122);
+			this->lbWelcome->Size = System::Drawing::Size(205, 78);
 			this->lbWelcome->TabIndex = 0;
 			this->lbWelcome->Text = L"Welcome";
 			this->lbWelcome->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			this->lbWelcome->Click += gcnew System::EventHandler(this, &Dashboard::lbWelcome_Click);
 			// 
 			// btnNewTeam
 			// 
@@ -227,12 +232,13 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			this->btnNewTeam->Name = L"btnNewTeam";
 			this->btnNewTeam->Size = System::Drawing::Size(253, 63);
 			this->btnNewTeam->TabIndex = 2;
-			this->btnNewTeam->Text = L"Create New Team";
+			this->btnNewTeam->Text = L"Create New Room";
 			this->btnNewTeam->UseVisualStyleBackColor = true;
 			this->btnNewTeam->Click += gcnew System::EventHandler(this, &Dashboard::button1_Click);
 			// 
 			// panel1
 			// 
+			this->panel1->BackColor = System::Drawing::Color::Transparent;
 			this->panel1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel1.BackgroundImage")));
 			this->panel1->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			this->panel1->Controls->Add(this->label2);
@@ -252,9 +258,9 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			this->label2->ForeColor = System::Drawing::Color::White;
 			this->label2->Location = System::Drawing::Point(18, 11);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(88, 29);
+			this->label2->Size = System::Drawing::Size(104, 29);
 			this->label2->TabIndex = 3;
-			this->label2->Text = L"Teams";
+			this->label2->Text = L"ROOMS";
 			this->label2->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			this->label2->Click += gcnew System::EventHandler(this, &Dashboard::label2_Click);
 			// 
@@ -263,6 +269,10 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			this->btnRefresh->BackColor = System::Drawing::Color::Transparent;
 			this->btnRefresh->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"btnRefresh.BackgroundImage")));
 			this->btnRefresh->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
+			this->btnRefresh->FlatAppearance->BorderColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(201)),
+				static_cast<System::Int32>(static_cast<System::Byte>(226)), static_cast<System::Int32>(static_cast<System::Byte>(101)));
+			this->btnRefresh->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->btnRefresh->ForeColor = System::Drawing::Color::Transparent;
 			this->btnRefresh->Location = System::Drawing::Point(228, 11);
 			this->btnRefresh->Name = L"btnRefresh";
 			this->btnRefresh->Size = System::Drawing::Size(29, 29);
@@ -272,18 +282,18 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			// 
 			// lvTeams
 			// 
-			this->lvTeams->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(5)), static_cast<System::Int32>(static_cast<System::Byte>(5)),
-				static_cast<System::Int32>(static_cast<System::Byte>(5)));
+			this->lvTeams->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(201)), static_cast<System::Int32>(static_cast<System::Byte>(226)),
+				static_cast<System::Int32>(static_cast<System::Byte>(101)));
+			this->lvTeams->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->lvTeams->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(1) { this->ch_name });
-			this->lvTeams->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->lvTeams->ForeColor = System::Drawing::Color::White;
+			this->lvTeams->Font = (gcnew System::Drawing::Font(L"Consolas", 13));
+			this->lvTeams->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(98)), static_cast<System::Int32>(static_cast<System::Byte>(124)),
+				static_cast<System::Int32>(static_cast<System::Byte>(68)));
 			this->lvTeams->HideSelection = false;
-			this->lvTeams->Location = System::Drawing::Point(12, 46);
+			this->lvTeams->Location = System::Drawing::Point(16, 43);
 			this->lvTeams->MultiSelect = false;
 			this->lvTeams->Name = L"lvTeams";
-			this->lvTeams->Scrollable = false;
-			this->lvTeams->Size = System::Drawing::Size(247, 615);
+			this->lvTeams->Size = System::Drawing::Size(239, 371);
 			this->lvTeams->TabIndex = 1;
 			this->lvTeams->TileSize = System::Drawing::Size(242, 35);
 			this->lvTeams->UseCompatibleStateImageBehavior = false;
@@ -297,7 +307,10 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			// 
 			// panel2
 			// 
-			this->panel2->BackColor = System::Drawing::Color::MistyRose;
+			this->panel2->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(201)), static_cast<System::Int32>(static_cast<System::Byte>(226)),
+				static_cast<System::Int32>(static_cast<System::Byte>(101)));
+			this->panel2->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel2.BackgroundImage")));
+			this->panel2->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
 			this->panel2->Controls->Add(this->btnMessAssign);
 			this->panel2->Controls->Add(this->btnRefreshMessage);
 			this->panel2->Controls->Add(this->lbCode);
@@ -319,9 +332,12 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			// 
 			// btnMessAssign
 			// 
+			this->btnMessAssign->FlatAppearance->BorderColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(98)),
+				static_cast<System::Int32>(static_cast<System::Byte>(124)), static_cast<System::Int32>(static_cast<System::Byte>(68)));
 			this->btnMessAssign->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->btnMessAssign->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
+			this->btnMessAssign->Font = (gcnew System::Drawing::Font(L"Consolas", 12, System::Drawing::FontStyle::Bold));
+			this->btnMessAssign->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(98)), static_cast<System::Int32>(static_cast<System::Byte>(124)),
+				static_cast<System::Int32>(static_cast<System::Byte>(68)));
 			this->btnMessAssign->Location = System::Drawing::Point(832, 27);
 			this->btnMessAssign->Name = L"btnMessAssign";
 			this->btnMessAssign->Size = System::Drawing::Size(163, 50);
@@ -336,6 +352,9 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			this->btnRefreshMessage->BackColor = System::Drawing::Color::Transparent;
 			this->btnRefreshMessage->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"btnRefreshMessage.BackgroundImage")));
 			this->btnRefreshMessage->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
+			this->btnRefreshMessage->FlatAppearance->BorderColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(201)),
+				static_cast<System::Int32>(static_cast<System::Byte>(226)), static_cast<System::Int32>(static_cast<System::Byte>(101)));
+			this->btnRefreshMessage->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->btnRefreshMessage->Location = System::Drawing::Point(959, 83);
 			this->btnRefreshMessage->Name = L"btnRefreshMessage";
 			this->btnRefreshMessage->Size = System::Drawing::Size(36, 36);
@@ -347,11 +366,12 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			// lbCode
 			// 
 			this->lbCode->AutoSize = true;
-			this->lbCode->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
+			this->lbCode->Font = (gcnew System::Drawing::Font(L"Consolas", 10.2F, System::Drawing::FontStyle::Bold));
+			this->lbCode->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(98)), static_cast<System::Int32>(static_cast<System::Byte>(124)),
+				static_cast<System::Int32>(static_cast<System::Byte>(68)));
 			this->lbCode->Location = System::Drawing::Point(27, 69);
 			this->lbCode->Name = L"lbCode";
-			this->lbCode->Size = System::Drawing::Size(48, 20);
+			this->lbCode->Size = System::Drawing::Size(45, 20);
 			this->lbCode->TabIndex = 10;
 			this->lbCode->Text = L"Code";
 			this->lbCode->TextAlign = System::Drawing::ContentAlignment::TopCenter;
@@ -360,13 +380,14 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			// lbTeamName
 			// 
 			this->lbTeamName->AutoSize = true;
-			this->lbTeamName->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
+			this->lbTeamName->Font = (gcnew System::Drawing::Font(L"Consolas", 18, System::Drawing::FontStyle::Bold));
+			this->lbTeamName->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(98)), static_cast<System::Int32>(static_cast<System::Byte>(124)),
+				static_cast<System::Int32>(static_cast<System::Byte>(68)));
 			this->lbTeamName->Location = System::Drawing::Point(21, 24);
 			this->lbTeamName->Name = L"lbTeamName";
-			this->lbTeamName->Size = System::Drawing::Size(182, 36);
+			this->lbTeamName->Size = System::Drawing::Size(159, 36);
 			this->lbTeamName->TabIndex = 9;
-			this->lbTeamName->Text = L"Team Name";
+			this->lbTeamName->Text = L"ROOM Name";
 			this->lbTeamName->TextAlign = System::Drawing::ContentAlignment::TopCenter;
 			this->lbTeamName->Visible = false;
 			// 
@@ -375,8 +396,10 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			this->lvAssignment->Activation = System::Windows::Forms::ItemActivation::OneClick;
 			this->lvAssignment->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
+			this->lvAssignment->ForeColor = System::Drawing::Color::Black;
 			this->lvAssignment->HideSelection = false;
-			this->lvAssignment->Location = System::Drawing::Point(19, 125);
+			this->lvAssignment->Location = System::Drawing::Point(21, 125);
+			this->lvAssignment->MultiSelect = false;
 			this->lvAssignment->Name = L"lvAssignment";
 			this->lvAssignment->Size = System::Drawing::Size(968, 459);
 			this->lvAssignment->TabIndex = 8;
@@ -391,7 +414,7 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			this->lvMessage->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->lvMessage->HideSelection = false;
-			this->lvMessage->Location = System::Drawing::Point(19, 125);
+			this->lvMessage->Location = System::Drawing::Point(21, 125);
 			this->lvMessage->Name = L"lvMessage";
 			this->lvMessage->Size = System::Drawing::Size(968, 459);
 			this->lvMessage->TabIndex = 8;
@@ -457,8 +480,10 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			this->tbTeamCode->Name = L"tbTeamCode";
 			this->tbTeamCode->Size = System::Drawing::Size(253, 34);
 			this->tbTeamCode->TabIndex = 4;
-			this->tbTeamCode->Text = L"Enter Team Code";
+			this->tbTeamCode->Text = L"Enter Room Code";
 			this->tbTeamCode->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			this->tbTeamCode->Click += gcnew System::EventHandler(this, &Dashboard::tbTeamCode_Click);
+			this->tbTeamCode->TextChanged += gcnew System::EventHandler(this, &Dashboard::tbTeamCode_TextChanged);
 			// 
 			// label1
 			// 
@@ -473,8 +498,8 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			// 
 			// Dashboard
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
+			this->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 			this->ClientSize = System::Drawing::Size(1262, 663);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->panel2);
@@ -810,6 +835,8 @@ private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e)
 	btnMessAssign->Visible = false;
 	lvAssignment->Visible = false;
 	btnCreate->Visible = false;
+
+	tbTeamCode->Text = "Enter Room Code";
 }
 private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e) {
 
@@ -852,7 +879,7 @@ private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e
 			   String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
 			   SqlConnection^ sqlConn = gcnew SqlConnection(connString);
 
-			   lvMessage->Columns->Add("Message", 400);
+			   lvMessage->Columns->Add("Message", 600);
 			   lvMessage->Columns->Add("By", 350);
 			  
 			   SqlCommand^ command = gcnew SqlCommand("Select * from " + tempCode + "Message ;",sqlConn);
@@ -884,9 +911,9 @@ private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e
 					 SqlConnection^ sqlConn = gcnew SqlConnection(connString);
 					 sqlConn->Open();
 
-					 lvAssignment->Columns->Add("Assignment", 420);
-					 lvAssignment->Columns->Add("Due Date", 150);
-					 lvAssignment->Columns->Add("Due Time", 150);
+					 lvAssignment->Columns->Add("Assignment", 520);
+					 lvAssignment->Columns->Add("Due Date", 200);
+					 lvAssignment->Columns->Add("Due Time", 200);
 					 
 
 					 SqlCommand^ command = gcnew SqlCommand("Select title, dueDate, dueTime from " + tempCode + "Assignment ;", sqlConn);
@@ -968,6 +995,16 @@ private: System::Void lvAssignment_SelectedIndexChanged(System::Object^ sender, 
 			eclassroom::SubmitAssignment submitAssignment(u, tempCode, id);
 			submitAssignment.ShowDialog();
 		}
+	}
+}
+private: System::Void lbWelcome_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void tbTeamCode_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void tbTeamCode_Click(System::Object^ sender, System::EventArgs^ e) {
+	if (tbTeamCode->Text == "Enter Room Code")
+	{
+		tbTeamCode->Text = "";
 	}
 }
 };

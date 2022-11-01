@@ -50,8 +50,8 @@ namespace eclassroom {
 	protected:
 
 	protected:
-	private: System::Windows::Forms::Label^ label1;
-	private: System::Windows::Forms::PictureBox^ pictureBox1;
+
+
 	private: System::Windows::Forms::Button^ btnCreate;
 	private: System::Windows::Forms::Button^ btnCancel;
 
@@ -71,96 +71,70 @@ namespace eclassroom {
 		{
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(CreateTeam::typeid));
 			this->tbName = (gcnew System::Windows::Forms::TextBox());
-			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->btnCreate = (gcnew System::Windows::Forms::Button());
 			this->btnCancel = (gcnew System::Windows::Forms::Button());
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// tbName
 			// 
-			this->tbName->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(36)), static_cast<System::Int32>(static_cast<System::Byte>(130)),
-				static_cast<System::Int32>(static_cast<System::Byte>(255)));
+			this->tbName->BackColor = System::Drawing::Color::White;
+			this->tbName->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->tbName->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->tbName->Location = System::Drawing::Point(12, 214);
+			this->tbName->Location = System::Drawing::Point(137, 241);
 			this->tbName->Name = L"tbName";
-			this->tbName->Size = System::Drawing::Size(458, 34);
+			this->tbName->Size = System::Drawing::Size(224, 27);
 			this->tbName->TabIndex = 0;
 			this->tbName->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
 			// 
-			// label1
-			// 
-			this->label1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
-				| System::Windows::Forms::AnchorStyles::Right));
-			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->label1->Location = System::Drawing::Point(115, 162);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(236, 29);
-			this->label1->TabIndex = 1;
-			this->label1->Text = L"Enter Name of Team";
-			// 
-			// pictureBox1
-			// 
-			this->pictureBox1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.BackgroundImage")));
-			this->pictureBox1->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			this->pictureBox1->Location = System::Drawing::Point(62, 29);
-			this->pictureBox1->Name = L"pictureBox1";
-			this->pictureBox1->Size = System::Drawing::Size(376, 100);
-			this->pictureBox1->TabIndex = 2;
-			this->pictureBox1->TabStop = false;
-			// 
 			// btnCreate
 			// 
-			this->btnCreate->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(36)), static_cast<System::Int32>(static_cast<System::Byte>(130)),
-				static_cast<System::Int32>(static_cast<System::Byte>(255)));
-			this->btnCreate->FlatStyle = System::Windows::Forms::FlatStyle::Popup;
+			this->btnCreate->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+			this->btnCreate->BackColor = System::Drawing::Color::Transparent;
+			this->btnCreate->FlatAppearance->BorderSize = 0;
+			this->btnCreate->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->btnCreate->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btnCreate->Location = System::Drawing::Point(199, 284);
+			this->btnCreate->ForeColor = System::Drawing::SystemColors::ControlLight;
+			this->btnCreate->Location = System::Drawing::Point(92, 296);
 			this->btnCreate->Name = L"btnCreate";
-			this->btnCreate->Size = System::Drawing::Size(99, 41);
+			this->btnCreate->Size = System::Drawing::Size(99, 31);
 			this->btnCreate->TabIndex = 3;
-			this->btnCreate->Text = L"Create";
 			this->btnCreate->UseVisualStyleBackColor = false;
 			this->btnCreate->Click += gcnew System::EventHandler(this, &CreateTeam::btnCreate_Click);
 			// 
 			// btnCancel
 			// 
-			this->btnCancel->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(36)), static_cast<System::Int32>(static_cast<System::Byte>(130)),
-				static_cast<System::Int32>(static_cast<System::Byte>(255)));
+			this->btnCancel->BackColor = System::Drawing::Color::Transparent;
+			this->btnCancel->FlatAppearance->BorderSize = 0;
 			this->btnCancel->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->btnCancel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btnCancel->Location = System::Drawing::Point(192, 364);
+			this->btnCancel->Location = System::Drawing::Point(307, 298);
 			this->btnCancel->Name = L"btnCancel";
-			this->btnCancel->Size = System::Drawing::Size(113, 41);
+			this->btnCancel->Size = System::Drawing::Size(97, 31);
 			this->btnCancel->TabIndex = 3;
-			this->btnCancel->Text = L"Cancel";
 			this->btnCancel->UseVisualStyleBackColor = false;
 			this->btnCancel->Click += gcnew System::EventHandler(this, &CreateTeam::btnCancel_Click);
 			// 
 			// CreateTeam
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(36)), static_cast<System::Int32>(static_cast<System::Byte>(160)),
-				static_cast<System::Int32>(static_cast<System::Byte>(255)));
+			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
+			this->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(201)), static_cast<System::Int32>(static_cast<System::Byte>(226)),
+				static_cast<System::Int32>(static_cast<System::Byte>(101)));
+			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
+			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
 			this->ClientSize = System::Drawing::Size(482, 453);
 			this->ControlBox = false;
 			this->Controls->Add(this->btnCreate);
 			this->Controls->Add(this->btnCancel);
-			this->Controls->Add(this->pictureBox1);
-			this->Controls->Add(this->label1);
 			this->Controls->Add(this->tbName);
 			this->MaximizeBox = false;
 			this->Name = L"CreateTeam";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"CreateTeam";
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
+			this->Load += gcnew System::EventHandler(this, &CreateTeam::CreateTeam_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -283,6 +257,8 @@ private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^
 		}
 	
 
+}
+private: System::Void CreateTeam_Load(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 

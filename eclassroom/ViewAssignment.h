@@ -59,9 +59,12 @@ namespace eclassroom {
 			this->ClientSize = System::Drawing::Size(934, 658);
 			this->Name = L"ViewAssignment1";
 			this->Text = L"Assignment";
+			this->Load += gcnew System::EventHandler(this, &ViewAssignment1::ViewAssignment1_Load);
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
+	private: System::Void ViewAssignment1_Load(System::Object^ sender, System::EventArgs^ e) {
+	}
 	};
 }
