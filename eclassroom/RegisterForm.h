@@ -177,6 +177,7 @@ namespace eclassroom {
 			this->Controls->Add(this->btnLoginRegisterForm);
 			this->Controls->Add(this->btnRegister);
 			this->DoubleBuffered = true;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->MaximizeBox = false;
 			this->Name = L"RegisterForm";
 			this->SizeGripStyle = System::Windows::Forms::SizeGripStyle::Hide;

@@ -503,6 +503,7 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			this->ClientSize = System::Drawing::Size(1262, 663);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->panel2);
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->MaximizeBox = false;
 			this->Name = L"Dashboard";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;

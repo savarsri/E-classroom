@@ -130,6 +130,7 @@ namespace eclassroom {
 			this->Controls->Add(this->btnCreate);
 			this->Controls->Add(this->btnCancel);
 			this->Controls->Add(this->tbName);
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->MaximizeBox = false;
 			this->Name = L"CreateTeam";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;

@@ -146,6 +146,7 @@ namespace eclassroom {
 			this->DoubleBuffered = true;
 			this->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Margin = System::Windows::Forms::Padding(6);
 			this->MaximizeBox = false;
 			this->Name = L"LoginForm";
