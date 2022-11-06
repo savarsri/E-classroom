@@ -79,7 +79,7 @@ namespace eclassroom {
 				static_cast<System::Byte>(0)));
 			this->tbName->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(127)), static_cast<System::Int32>(static_cast<System::Byte>(110)),
 				static_cast<System::Int32>(static_cast<System::Byte>(132)));
-			this->tbName->Location = System::Drawing::Point(129, 283);
+			this->tbName->Location = System::Drawing::Point(129, 230);
 			this->tbName->Name = L"tbName";
 			this->tbName->Size = System::Drawing::Size(325, 27);
 			this->tbName->TabIndex = 2;
@@ -95,7 +95,7 @@ namespace eclassroom {
 				static_cast<System::Byte>(0)));
 			this->tbPassword->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(127)), static_cast<System::Int32>(static_cast<System::Byte>(110)),
 				static_cast<System::Int32>(static_cast<System::Byte>(132)));
-			this->tbPassword->Location = System::Drawing::Point(130, 492);
+			this->tbPassword->Location = System::Drawing::Point(129, 541);
 			this->tbPassword->Name = L"tbPassword";
 			this->tbPassword->PasswordChar = '*';
 			this->tbPassword->Size = System::Drawing::Size(324, 27);
@@ -112,7 +112,7 @@ namespace eclassroom {
 				static_cast<System::Byte>(0)));
 			this->tbEmail->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(127)), static_cast<System::Int32>(static_cast<System::Byte>(110)),
 				static_cast<System::Int32>(static_cast<System::Byte>(132)));
-			this->tbEmail->Location = System::Drawing::Point(129, 389);
+			this->tbEmail->Location = System::Drawing::Point(129, 334);
 			this->tbEmail->Name = L"tbEmail";
 			this->tbEmail->Size = System::Drawing::Size(325, 27);
 			this->tbEmail->TabIndex = 2;
@@ -128,7 +128,7 @@ namespace eclassroom {
 			this->btnRegister->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->btnRegister->ForeColor = System::Drawing::Color::Transparent;
-			this->btnRegister->Location = System::Drawing::Point(123, 590);
+			this->btnRegister->Location = System::Drawing::Point(121, 636);
 			this->btnRegister->Name = L"btnRegister";
 			this->btnRegister->Size = System::Drawing::Size(347, 50);
 			this->btnRegister->TabIndex = 3;
@@ -152,12 +152,18 @@ namespace eclassroom {
 			// 
 			// tbPRN
 			// 
+			this->tbPRN->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->tbPRN->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->tbPRN->Location = System::Drawing::Point(123, 47);
+			this->tbPRN->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(127)), static_cast<System::Int32>(static_cast<System::Byte>(110)),
+				static_cast<System::Int32>(static_cast<System::Byte>(132)));
+			this->tbPRN->Location = System::Drawing::Point(129, 438);
 			this->tbPRN->Name = L"tbPRN";
-			this->tbPRN->Size = System::Drawing::Size(300, 34);
+			this->tbPRN->Size = System::Drawing::Size(300, 27);
 			this->tbPRN->TabIndex = 4;
+			this->tbPRN->Text = L"Enter 4 digit PRN";
+			this->tbPRN->Click += gcnew System::EventHandler(this, &RegisterForm::tbPRN_Click);
+			this->tbPRN->TextChanged += gcnew System::EventHandler(this, &RegisterForm::tbPRN_TextChanged);
 			// 
 			// RegisterForm
 			// 
@@ -259,6 +265,14 @@ private: System::Void tbPassword_Click(System::Object^ sender, System::EventArgs
 	if (tbPassword->Text == "Password")
 	{
 		tbPassword->Text = "";
+	}
+}
+private: System::Void tbPRN_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void tbPRN_Click(System::Object^ sender, System::EventArgs^ e) {
+	if (tbPRN->Text == "Enter 4 digit PRN")
+	{
+		tbPRN->Text = "";
 	}
 }
 };

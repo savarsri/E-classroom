@@ -129,6 +129,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RegisterForm.cpp" />
     <ClCompile Include="SubmitAssignment.cpp" />
+    <ClCompile Include="SubmitList.cpp" />
     <ClCompile Include="UpdateAssignment.cpp" />
     <ClCompile Include="ViewAssignment.cpp" />
   </ItemGroup>
@@ -149,6 +150,9 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="SubmitAssignment.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="SubmitList.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="UpdateAssignment.h">
@@ -180,6 +184,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SubmitAssignment.resx">
       <DependentUpon>SubmitAssignment.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubmitList.resx">
+      <DependentUpon>SubmitList.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UpdateAssignment.resx">
       <DependentUpon>UpdateAssignment.h</DependentUpon>

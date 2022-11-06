@@ -1,5 +1,6 @@
 #pragma once
 #include "User.h"
+#include "SubmitList.h"
 
 namespace eclassroom {
 
@@ -25,7 +26,9 @@ namespace eclassroom {
 		String^ description;
 		String^ dueDate;
 		String^ dueTime;
-	private: System::Windows::Forms::Button^ btnSubmitBy;
+	private: System::Windows::Forms::Button^ btnSby;
+	public:
+
 	public:
 		String^ link;
 
@@ -130,7 +133,7 @@ namespace eclassroom {
 			this->tbLink = (gcnew System::Windows::Forms::RichTextBox());
 			this->dtpDate = (gcnew System::Windows::Forms::DateTimePicker());
 			this->dtpTime = (gcnew System::Windows::Forms::DateTimePicker());
-			this->btnSubmitBy = (gcnew System::Windows::Forms::Button());
+			this->btnSby = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// label1
@@ -261,29 +264,31 @@ namespace eclassroom {
 			this->dtpTime->Size = System::Drawing::Size(164, 34);
 			this->dtpTime->TabIndex = 4;
 			// 
-			// btnSubmitBy
+			// btnSby
 			// 
-			this->btnSubmitBy->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->btnSby->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btnSubmitBy->Location = System::Drawing::Point(567, 518);
-			this->btnSubmitBy->Name = L"btnSubmitBy";
-			this->btnSubmitBy->Size = System::Drawing::Size(135, 71);
-			this->btnSubmitBy->TabIndex = 1;
-			this->btnSubmitBy->Text = L"Submitted By";
-			this->btnSubmitBy->UseVisualStyleBackColor = true;
-			this->btnSubmitBy->Click += gcnew System::EventHandler(this, &UpdateAssignment::btnCancel_Click);
+			this->btnSby->Location = System::Drawing::Point(581, 527);
+			this->btnSby->Name = L"btnSby";
+			this->btnSby->Size = System::Drawing::Size(146, 53);
+			this->btnSby->TabIndex = 5;
+			this->btnSby->Text = L"Submitted By";
+			this->btnSby->UseVisualStyleBackColor = true;
+			this->btnSby->Click += gcnew System::EventHandler(this, &UpdateAssignment::btnSby_Click);
 			// 
 			// UpdateAssignment
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(201)), static_cast<System::Int32>(static_cast<System::Byte>(226)),
+				static_cast<System::Int32>(static_cast<System::Byte>(101)));
 			this->ClientSize = System::Drawing::Size(856, 610);
+			this->Controls->Add(this->btnSby);
 			this->Controls->Add(this->dtpTime);
 			this->Controls->Add(this->dtpDate);
 			this->Controls->Add(this->tbLink);
 			this->Controls->Add(this->tbDescription);
 			this->Controls->Add(this->tbTitle);
-			this->Controls->Add(this->btnSubmitBy);
 			this->Controls->Add(this->btnCancel);
 			this->Controls->Add(this->btnModify);
 			this->Controls->Add(this->label5);
@@ -346,6 +351,10 @@ private: System::Void btnModify_Click(System::Object^ sender, System::EventArgs^
 
 }
 private: System::Void UpdateAssignment_Load(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void btnSby_Click(System::Object^ sender, System::EventArgs^ e) {
+	eclassroom::SubmitList submitList(code, id);
+	submitList.ShowDialog();
 }
 };
 }

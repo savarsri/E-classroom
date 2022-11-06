@@ -35,7 +35,6 @@ namespace eclassroom {
 		int len;
 		int num;
 		int* sby = (int*)malloc(num * sizeof(int));
-		//int* sby = new int(num);
 
 		/*
 		
@@ -370,6 +369,8 @@ namespace eclassroom {
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(846, 497);
+			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(201)), static_cast<System::Int32>(static_cast<System::Byte>(226)),
+				static_cast<System::Int32>(static_cast<System::Byte>(101)));
 			this->Controls->Add(this->richTextBox1);
 			this->Controls->Add(this->btnCancel);
 			this->Controls->Add(this->btnSubmit);
@@ -418,12 +419,12 @@ private: System::Void btnSubmit_Click(System::Object^ sender, System::EventArgs^
 		catch (Exception^ ex) {
 			MessageBox::Show(ex->ToString(), "Failed", MessageBoxButtons::OK);
 		}
-		MessageBox::Show(num.ToString(), "h");
 		int temp = Int64::Parse(u->prn);
 		Insert(sby, num, num, temp);
-		num++;
-		MessageBox::Show(num.ToString(), "h");
+		num++;	
+		
 		this->Close();
+		
 
 	}
 	else if (btnSubmit->Text=="Undo Submit")
@@ -459,8 +460,7 @@ private: System::Void btnSubmit_Click(System::Object^ sender, System::EventArgs^
 		for (i = 0; i < num-1; i++) {
 			newTemp = newTemp + tempArr[i].ToString();
 		}
-
-		MessageBox::Show(newTemp, "TEMP");
+		num--;
 
 
 		try {
@@ -478,13 +478,13 @@ private: System::Void btnSubmit_Click(System::Object^ sender, System::EventArgs^
 			
 
 			btnSubmit->Text = "Submit";
-
+			this->Close();
 		}
 		catch (Exception^ ex) {
 			MessageBox::Show(ex->ToString(), "Failed", MessageBoxButtons::OK);
 		}
 		
-		this->Close();
+		
 	}
 	
 
