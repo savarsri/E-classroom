@@ -2,6 +2,7 @@
 //compile with: /clr
 #include "User.h"
 #include <string>
+#include <iostream>
 
 
 namespace eclassroom {
@@ -29,10 +30,94 @@ namespace eclassroom {
 		String^ title;
 		String^ description;
 		String^ due;
-	
-	public:
 		String^ link;
 		String^ submitBy;
+		int len;
+		int num;
+		int* sby = (int*)malloc(num * sizeof(int));
+		//int* sby = new int(num);
+
+		/*
+		
+		BUBBLE SORT
+		
+		*/
+
+	public: void bubbleSort(int arr[], int n)
+	{
+		int i, j;
+		bool swapped;
+		for (i = 0; i < n - 1; i++)
+		{
+			swapped = false;
+			for (j = 0; j < n - i - 1; j++)
+			{
+				if (arr[j] > arr[j + 1])
+				{
+					swap(arr[j], arr[j + 1]);
+					swapped = true;
+				}
+			}
+
+			if (swapped == false)
+				break;
+		}
+	}
+		  /*
+
+		BINARY SEARCH
+
+		*/
+
+	public: int binarySearch(int arr[], int l, int r, int x)
+	{
+		if (r >= l) {
+			int mid = l + (r - l) / 2;
+
+			if (arr[mid] == x) {
+				return mid;
+			}
+
+			if (arr[mid] > x) {
+				return binarySearch(arr, l, mid - 1, x);
+			}
+			else {
+				return binarySearch(arr, mid + 1, r, x);
+			}
+		}
+
+		return -1;
+	}
+
+		  /*
+
+			DELETE FROM ARRAY
+
+		*/
+
+	public: void deletePrn(int* a, int len, int pos) {
+		int i;
+		for (i = pos; i < len - 1; i++) {
+			a[i] = a[i + 1];
+		}
+		realloc(a, sizeof(int) * (len - 1));
+	}
+		  /*
+
+		INSERT IN ARRAY
+
+		*/
+
+	public: void Insert(int* a, int len, int pos, int ele)
+		  {
+			  realloc(a, sizeof(int) * (len + 1));
+
+			  for (int i = len; i > pos; i--)
+			  {
+				  a[i] = a[i - 1];
+			  }
+			  a[pos] = ele;
+		  }
 	
 		   
 		SubmitAssignment(User^ user, String^ teamCode, int x)
@@ -109,9 +194,37 @@ namespace eclassroom {
 				MessageBox::Show(ex->ToString(), "Failed", MessageBoxButtons::OK);
 			}
 
-			if (submitBy->Contains(u->email->ToString())) {
+			len = submitBy->Length;
+			num = len / 4;
+			if (len == 0) {
+
+			}
+			else {
+				
+				int i = 0, j = 0;
+				while (i < len) {
+					String^ temp = submitBy->Substring(i, 4);
+					int tempPrn = Int64::Parse(temp);
+					sby[j] = tempPrn;
+					i = i + 4;
+					j++;
+				}
+				
+			}
+
+			bubbleSort(sby, num);
+
+
+			int userPRN = Int64::Parse(u->prn);
+
+			int result = binarySearch(sby, 0, num - 1, userPRN );
+
+
+
+			if (result!=-1) {
 				btnSubmit->Text = "Undo Submit";
 			}
+			
 
 
 		}
@@ -275,14 +388,17 @@ namespace eclassroom {
 
 		}
 #pragma endregion
-	private: System::Void btnCancel_Click(System::Object^ sender, System::EventArgs^ e) {
+	
+
+private: System::Void btnCancel_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
 	}
 private: System::Void btnSubmit_Click(System::Object^ sender, System::EventArgs^ e) {
 
+	
 	if (btnSubmit->Text == "Submit" || btnSubmit->Text == "Submit late") {
 
-		submitBy = submitBy + u->email;
+		submitBy = submitBy + u->prn;
 		try {
 			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
 			SqlConnection sqlConn(connString);
@@ -295,24 +411,57 @@ private: System::Void btnSubmit_Click(System::Object^ sender, System::EventArgs^
 			command.ExecuteNonQuery();
 
 			sqlConn.Close();
-			this->Close();
+			
 
 			btnSubmit->Text = "Undo Submit";
 		}
 		catch (Exception^ ex) {
 			MessageBox::Show(ex->ToString(), "Failed", MessageBoxButtons::OK);
 		}
+		MessageBox::Show(num.ToString(), "h");
+		int temp = Int64::Parse(u->prn);
+		Insert(sby, num, num, temp);
+		num++;
+		MessageBox::Show(num.ToString(), "h");
+		this->Close();
+
 	}
 	else if (btnSubmit->Text=="Undo Submit")
 	{
-		int start;
-		String^ newTemp;
-		if (start < 0) {
+
+		/*
+
+		DELETE FROM ARRAY
+
+		*/
+
+		int userPRN = Int64::Parse(u->prn);
+		int index = binarySearch(sby, 0, num, userPRN);
+		int *tempArr = (int*)malloc((num - 1) * sizeof(int));
+		int k,j = 0;
+
+		for (k = 0; k < num-1; k++)
+		{
+			if (j == index)
+			{
+				j++;
+				k--;
+			}
+			else
+			{
+				tempArr[k] = sby[j];
+				j++;
+			}
 		}
-		else {
-			start = submitBy->IndexOf(u->email->ToString());
-			newTemp = submitBy->Remove(start, u->email->Length);
+
+		String^ newTemp="";
+		int i;
+		for (i = 0; i < num-1; i++) {
+			newTemp = newTemp + tempArr[i].ToString();
 		}
+
+		MessageBox::Show(newTemp, "TEMP");
+
 
 		try {
 			String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
@@ -326,7 +475,7 @@ private: System::Void btnSubmit_Click(System::Object^ sender, System::EventArgs^
 			command.ExecuteNonQuery();
 
 			sqlConn.Close();
-			this->Close();
+			
 
 			btnSubmit->Text = "Submit";
 
@@ -335,8 +484,9 @@ private: System::Void btnSubmit_Click(System::Object^ sender, System::EventArgs^
 			MessageBox::Show(ex->ToString(), "Failed", MessageBoxButtons::OK);
 		}
 		
-		
+		this->Close();
 	}
+	
 
 	
 }

@@ -25,6 +25,8 @@ namespace eclassroom {
 		String^ description;
 		String^ dueDate;
 		String^ dueTime;
+	private: System::Windows::Forms::Button^ btnSubmitBy;
+	public:
 		String^ link;
 
 		UpdateAssignment(User^ user, String^ teamCode, int x)
@@ -128,6 +130,7 @@ namespace eclassroom {
 			this->tbLink = (gcnew System::Windows::Forms::RichTextBox());
 			this->dtpDate = (gcnew System::Windows::Forms::DateTimePicker());
 			this->dtpTime = (gcnew System::Windows::Forms::DateTimePicker());
+			this->btnSubmitBy = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// label1
@@ -201,7 +204,7 @@ namespace eclassroom {
 			// 
 			this->btnCancel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btnCancel->Location = System::Drawing::Point(540, 527);
+			this->btnCancel->Location = System::Drawing::Point(398, 527);
 			this->btnCancel->Name = L"btnCancel";
 			this->btnCancel->Size = System::Drawing::Size(115, 53);
 			this->btnCancel->TabIndex = 1;
@@ -258,6 +261,18 @@ namespace eclassroom {
 			this->dtpTime->Size = System::Drawing::Size(164, 34);
 			this->dtpTime->TabIndex = 4;
 			// 
+			// btnSubmitBy
+			// 
+			this->btnSubmitBy->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->btnSubmitBy->Location = System::Drawing::Point(567, 518);
+			this->btnSubmitBy->Name = L"btnSubmitBy";
+			this->btnSubmitBy->Size = System::Drawing::Size(135, 71);
+			this->btnSubmitBy->TabIndex = 1;
+			this->btnSubmitBy->Text = L"Submitted By";
+			this->btnSubmitBy->UseVisualStyleBackColor = true;
+			this->btnSubmitBy->Click += gcnew System::EventHandler(this, &UpdateAssignment::btnCancel_Click);
+			// 
 			// UpdateAssignment
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
@@ -268,6 +283,7 @@ namespace eclassroom {
 			this->Controls->Add(this->tbLink);
 			this->Controls->Add(this->tbDescription);
 			this->Controls->Add(this->tbTitle);
+			this->Controls->Add(this->btnSubmitBy);
 			this->Controls->Add(this->btnCancel);
 			this->Controls->Add(this->btnModify);
 			this->Controls->Add(this->label5);

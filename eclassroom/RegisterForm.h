@@ -42,26 +42,11 @@ namespace eclassroom {
 	private: System::Windows::Forms::TextBox^ tbEmail;
 	private: System::Windows::Forms::Button^ btnRegister;
 	private: System::Windows::Forms::Button^ btnLoginRegisterForm;
+	private: System::Windows::Forms::TextBox^ tbPRN;
 
 	protected:
 
 	protected:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	private:
@@ -83,6 +68,7 @@ namespace eclassroom {
 			this->tbEmail = (gcnew System::Windows::Forms::TextBox());
 			this->btnRegister = (gcnew System::Windows::Forms::Button());
 			this->btnLoginRegisterForm = (gcnew System::Windows::Forms::Button());
+			this->tbPRN = (gcnew System::Windows::Forms::TextBox());
 			this->SuspendLayout();
 			// 
 			// tbName
@@ -164,6 +150,15 @@ namespace eclassroom {
 			this->btnLoginRegisterForm->UseVisualStyleBackColor = false;
 			this->btnLoginRegisterForm->Click += gcnew System::EventHandler(this, &RegisterForm::btnLoginRegisterForm_Click);
 			// 
+			// tbPRN
+			// 
+			this->tbPRN->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->tbPRN->Location = System::Drawing::Point(123, 47);
+			this->tbPRN->Name = L"tbPRN";
+			this->tbPRN->Size = System::Drawing::Size(300, 34);
+			this->tbPRN->TabIndex = 4;
+			// 
 			// RegisterForm
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
@@ -171,6 +166,7 @@ namespace eclassroom {
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
 			this->ClientSize = System::Drawing::Size(1262, 753);
+			this->Controls->Add(this->tbPRN);
 			this->Controls->Add(this->tbName);
 			this->Controls->Add(this->tbEmail);
 			this->Controls->Add(this->tbPassword);
@@ -201,8 +197,9 @@ private: System::Void btnRegister_Click(System::Object^ sender, System::EventArg
 	String^ name = tbName->Text;
 	String^ email = tbEmail->Text;
 	String^ password = tbPassword->Text;
+	String^ prn = tbPRN->Text;
 
-	if (name->Length == 0 || email->Length == 0 || password->Length == 0) {
+	if (name->Length == 0 || email->Length == 0 || prn->Length==0 || password->Length == 0) {
 		MessageBox::Show("Please enter the required details!", "Enter details", MessageBoxButtons::OK);
 		return;
 	}
@@ -214,10 +211,11 @@ private: System::Void btnRegister_Click(System::Object^ sender, System::EventArg
 		SqlConnection sqlConn(connString);
 		sqlConn.Open();
 
-		String^ sqlQuery = "INSERT INTO users " + "(name, email, password) VALUES " + "(@name, @email, @password);";
+		String^ sqlQuery = "INSERT INTO users " + "(name, email, prn, password) VALUES " + "(@name, @email, @prn, @password);";
 		SqlCommand command(sqlQuery, % sqlConn);
 		command.Parameters->AddWithValue("@name", name);
 		command.Parameters->AddWithValue("@email", email);
+		command.Parameters->AddWithValue("@prn", prn);
 		command.Parameters->AddWithValue("@password", password);
 
 		command.ExecuteNonQuery();
@@ -225,6 +223,7 @@ private: System::Void btnRegister_Click(System::Object^ sender, System::EventArg
 		user = gcnew User;
 		user->name = name;
 		user->email = email;
+		user->prn = prn;
 		user->password = password;
 
 		this->Close();

@@ -8,6 +8,7 @@ public:
 	int id;
 	String^ name;
 	String^ email;
+	String^ prn;
 	String^ password;
 
 

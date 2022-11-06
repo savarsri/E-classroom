@@ -186,7 +186,8 @@ private: System::Void btnLogin_Click(System::Object^ sender, System::EventArgs^ 
 			user->id = reader->GetInt32(0);
 			user->name = reader->GetString(1);
 			user->email = reader->GetString(2);
-			user->password = reader->GetString(3);
+			user->prn = reader->GetString(3);
+			user->password = reader->GetString(4);
 
 			this->Close();
 		}
