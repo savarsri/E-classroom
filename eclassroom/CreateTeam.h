@@ -29,9 +29,7 @@ namespace eclassroom {
 		CreateTeam(User^ user)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
+			
 			u = user;
 		}
 

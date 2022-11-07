@@ -3,6 +3,7 @@
 using namespace System;
 using namespace System::Data::SqlClient;
 
+
 public ref class User {
 public:
 	int id;
@@ -11,5 +12,7 @@ public:
 	String^ prn;
 	String^ password;
 
-
 };
+
+
+

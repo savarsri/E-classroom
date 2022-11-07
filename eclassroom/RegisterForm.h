@@ -20,9 +20,7 @@ namespace eclassroom {
 		RegisterForm(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
+			
 		}
 
 	protected:
@@ -207,6 +205,18 @@ private: System::Void btnRegister_Click(System::Object^ sender, System::EventArg
 
 	if (name->Length == 0 || email->Length == 0 || prn->Length==0 || password->Length == 0) {
 		MessageBox::Show("Please enter the required details!", "Enter details", MessageBoxButtons::OK);
+		return;
+	}
+
+	if (prn->Length != 4) {
+		MessageBox::Show("Please enter 4-digit PRN!", "Enter PRN", MessageBoxButtons::OK);
+		return;
+	}
+
+	prn = prn->ToLower();
+
+	if (prn->Contains("a") || prn->Contains("b") || prn->Contains("c") || prn->Contains("d") || prn->Contains("e") || prn->Contains("f") || prn->Contains("g") || prn->Contains("h") || prn->Contains("i") || prn->Contains("j") || prn->Contains("k") || prn->Contains("l") || prn->Contains("m") || prn->Contains("n") || prn->Contains("o") || prn->Contains("p") || prn->Contains("q") || prn->Contains("r") || prn->Contains("s") || prn->Contains("t") || prn->Contains("u") || prn->Contains("v") || prn->Contains("w") || prn->Contains("x") || prn->Contains("y") || prn->Contains("z")) {
+		MessageBox::Show("Please enter 4-digit PRN!", "Enter PRN", MessageBoxButtons::OK);
 		return;
 	}
 

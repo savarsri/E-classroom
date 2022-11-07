@@ -26,13 +26,9 @@ namespace eclassroom {
 		Dashboard(User^ user)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
+			
 			u = user;
 			
-
-
 			String^ codes;
 			lvTeams->Items->Clear();
 
@@ -40,6 +36,7 @@ namespace eclassroom {
 				String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
 				SqlConnection sqlConn(connString);
 				sqlConn.Open();
+
 				String^ sqlQuery = "Select teams from users where email=@email";
 				SqlCommand command(sqlQuery, % sqlConn);
 				command.Parameters->AddWithValue("@email", u->email);
@@ -112,9 +109,7 @@ namespace eclassroom {
 			{
 				MessageBox::Show("Failed to fetch previous codes", "Failed", MessageBoxButtons::OK);
 			}
-
-
-			
+	
 		}
 
 	protected:
@@ -602,7 +597,11 @@ private: System::Windows::Forms::ListView^ lvAssignment;
 			MessageBox::Show("Failed to join the team", "Failed", MessageBoxButtons::OK);
 		}
 	}
-
+		   /*
+		   
+		   REFRESH BUTTON
+		   
+		   */
 private: System::Void btnRefresh_Click(System::Object^ sender, System::EventArgs^ e) {
 	
 	
@@ -801,7 +800,8 @@ private: System::Void lvTeams_SelectedIndexChanged(System::Object^ sender, Syste
 			MessageBox::Show("Failed to fetch owner", "Failed", MessageBoxButtons::OK);
 		}
 
-		getMessage();
+		
+		get();
 
 		lbTeamName->Text = teamName;
 		lbCode->Text = "Code: "+tempCode;
@@ -865,7 +865,7 @@ private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e
 			tbMessage->Clear();
 			sqlConn.Close();
 
-			getMessage();
+			get();
 
 		}
 		catch (Exception^ ex)
@@ -876,7 +876,7 @@ private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e
 
 	
 }
-	   public: void getMessage() {
+	   public: void get() {
 		   try {
 			   lvMessage->Clear();
 			   String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
@@ -907,7 +907,7 @@ private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e
 		   }
 	   }
 
-			 public: void getAssignment() {
+			 public: void get(int id) {
 				 try {
 					 lvAssignment->Clear();
 					 String^ connString = "Data Source=localhost\\DurgaSQL;Initial Catalog=eclassroom;Integrated Security=True";
@@ -943,7 +943,7 @@ private: System::Void btnSend_Click(System::Object^ sender, System::EventArgs^ e
 			 }
 
 private: System::Void btnRefreshMessage_Click(System::Object^ sender, System::EventArgs^ e) {
-	getMessage();
+	get();
 }
 
 private: System::Void btnCreate_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -960,7 +960,7 @@ private: System::Void btnMessAssign_Click(System::Object^ sender, System::EventA
 		lvMessage->Visible = false;
 		btnRefreshMessage->Visible = false;
 		lvMessage->Clear();
-		getAssignment();
+		get(1);
 		if (createdBy == u->email) {
 			btnCreate->Visible = true;
 		}
@@ -976,7 +976,7 @@ private: System::Void btnMessAssign_Click(System::Object^ sender, System::EventA
 		lvAssignment->Visible = false;
 		lvMessage->Visible = true;
 		lvMessage->Clear();
-		getMessage();
+		get();
 	}
 }
 

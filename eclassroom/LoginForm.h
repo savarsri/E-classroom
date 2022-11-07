@@ -1,6 +1,8 @@
 #pragma once
 #include "User.h"
 
+
+
 namespace eclassroom {
 
 	using namespace System;
@@ -20,9 +22,7 @@ namespace eclassroom {
 		LoginForm(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
+			
 		}
 
 	protected:
